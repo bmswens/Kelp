@@ -21,6 +21,9 @@ function getFullPath(fileName, currentLocation) {
         output = `${currentLocation}${fileName}`
     }
     else {
+        if (!currentLocation.endsWith('/')) {
+            currentLocation += '/'
+        }
         output = `${currentLocation}${fileName}`
     }
     return output

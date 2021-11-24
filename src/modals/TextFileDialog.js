@@ -33,9 +33,8 @@ function TextFileDialog(props) {
     }
 
     async function submit() {
-        let name = getName(form.name)
         let fullPath = getFullPath(form.name, context.currentLocation)
-        let file = new File([form.content], name, {type: "text/richtext"})
+        let file = new File([form.content], form.name, {type: "text/richtext"})
         await Filer.uploadFile(fullPath, file)
         handleClose()
     }

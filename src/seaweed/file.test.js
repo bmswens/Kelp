@@ -73,4 +73,8 @@ describe('the getFullPath function', function() {
         let output = getFullPath('../otherDir/example.txt', '/thisDir')
         expect(output).toEqual('/otherDir/example.txt')
     })
+    it('should correctly assign nested paths', function() {
+        let output = getFullPath('example.txt', '/my/cool/nested/directory')
+        expect(output).toEqual('/my/cool/nested/directory/example.txt')
+    })
 })
