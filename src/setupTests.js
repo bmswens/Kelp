@@ -3,3 +3,10 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+process.env = {
+    ...process.env,
+    REACT_APP_FILER_HOST: 'localhost',
+    REACT_APP_FILER_PORT: '8888',
+    REACT_APP_FILER_SCHEME: 'http'
+}

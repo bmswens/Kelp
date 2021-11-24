@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+// React
+import React from 'react'
+
+// Material UI
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+// Custom
+import LocationContextWrapper from './nav/LocationContextWrapper'
+import TopNav from './nav/TopNav'
+import SideDrawer from './nav/SideDrawer'
+import FileExplorer from './content/FileExplorer'
+
 
 function App() {
+  // Theme from system
+  const wantsLight = window.matchMedia('(prefers-color-scheme: light').matches
+  let mode = 'dark'
+  if (wantsLight) {
+    mode = 'light'
+  }
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocationContextWrapper>
+      <ThemeProvider theme={theme}>
+        <TopNav />
+        <SideDrawer />
+        <FileExplorer />
+      </ThemeProvider>
+    </LocationContextWrapper>
   );
 }
 
