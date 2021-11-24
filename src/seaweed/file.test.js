@@ -1,6 +1,6 @@
 // to test
 import File from './file'
-import { getName } from './file'
+import { getName, getFullPath } from './file'
 
 const file = {
     "FullPath": "/example.log",
@@ -53,5 +53,24 @@ describe('The getName function', function() {
     it('should work with any number of slashes', function() {
         let output = getName('/test/fake/data')
         expect(output).toEqual('data')
+    })
+})
+
+describe('the getFullPath function', function() {
+    it('should correctly assign a full path with no leading info', function() {
+        let output = getFullPath('example.txt', '/')
+        expect(output).toEqual('/example.txt')
+    })
+    it('should correctly assigne a full path starting with "/"', function() {
+        let output = getFullPath('/new/test/example.txt', '/otherDir')
+        expect(output).toEqual('/new/test/example.txt')
+    })
+    it('should correctly assign a full path starting with "./"', function () {
+        let output = getFullPath('./example.txt', '/otherDir')
+        expect(output).toEqual('/otherDir/example.txt')
+    })
+    it('should correctly assign a full path starting with "../"', function() {
+        let output = getFullPath('../otherDir/example.txt', '/thisDir')
+        expect(output).toEqual('/otherDir/example.txt')
     })
 })

@@ -4,7 +4,27 @@ import { connectionString } from "./filer"
 function getName(path) {
     let finalSlash = path.lastIndexOf('/')
     return path.slice(finalSlash + 1)
-}  
+} 
+
+function getFullPath(fileName, currentLocation) {
+    let output
+    if (fileName.startsWith('/')) {
+        output = fileName
+    }
+    else if (fileName.startsWith('../')) {
+        let parentName = currentLocation.slice(0, currentLocation.lastIndexOf('/'))
+        fileName = fileName.replace('../', '/')
+        output = `${parentName}${fileName}`
+    }
+    else if (fileName.startsWith('./')) {
+        fileName = fileName.replace('./', '/')
+        output = `${currentLocation}${fileName}`
+    }
+    else {
+        output = `${currentLocation}${fileName}`
+    }
+    return output
+}
 
 class File {
 
@@ -27,5 +47,6 @@ class File {
 
 export default File
 export {
-    getName
+    getName,
+    getFullPath
 }

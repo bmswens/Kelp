@@ -17,9 +17,19 @@ async function getContent(file) {
     return response.text()
 }
 
+async function uploadFile(path, file) {
+    let formData = new FormData()
+    formData.append(path, file)
+    return fetch(`${connectionString}${path}`, {
+        method: 'POST',
+        body: formData
+    })
+}
+
 const Filer = {
     getFiles,
-    getContent
+    getContent,
+    uploadFile
 }
 
 export default Filer

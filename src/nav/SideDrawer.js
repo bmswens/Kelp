@@ -13,8 +13,9 @@ import Toolbar from '@mui/material/Toolbar'
 
 // Matierial UI Icons
 import StarIcon from '@mui/icons-material/Star'
-import CodeIcon from '@mui/icons-material/Code'
 
+// custom
+import ActionsList from './ActionsList'
 
 
 function DrawerHeader(props) {
@@ -67,18 +68,7 @@ function SideDrawer(props) {
                 </ListItem>
             </List>
             <Divider />
-            <List>
-                <ListItem
-                    button
-                >
-                    <ListItemIcon>
-                        <CodeIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Actions"
-                    />
-                </ListItem>
-            </List>
+            <ActionsList />
         </Drawer>
     )
 }
