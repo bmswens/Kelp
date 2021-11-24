@@ -21,7 +21,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import useDoubleClick from 'use-double-click'
 
 // custom
-import Filer from '../seaweed/filer'
+import { connectionString } from '../seaweed/filer'
 
 
 function RightClickMenu(props) {
@@ -93,7 +93,7 @@ function File(props) {
     }
 
     function download() {
-        window.open(`${Filer.connectionString}${props.data.FullPath}`, '_blank')
+        window.open(`${connectionString}${props.data.FullPath}`, '_blank')
         close()
     }
 
