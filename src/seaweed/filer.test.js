@@ -45,4 +45,16 @@ describe('The Filer Object', function() {
         let response = await Filer.uploadFile('/example.txt', f)
         expect(response.ok).toBeTruthy()
     })
+    it('should be able to delete a file', async function() {
+        global.fetch = jest.fn().mockResolvedValue({ok: true})
+        let response = await Filer.deleteItem('/example.log')
+        expect(response.ok).toBeTruthy()
+        expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/example.log?recursive=false', {method: 'DELETE'})
+    })
+    it('should be able to delete a folder recursively', async function() {
+        global.fetch = jest.fn().mockResolvedValue({ok: true})
+        let response = await Filer.deleteItem('/newItems', true)
+        expect(response.ok).toBeTruthy()
+        expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/newItems?recursive=true', {method: 'DELETE'})
+    })
 })

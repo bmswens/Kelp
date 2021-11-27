@@ -26,10 +26,18 @@ async function uploadFile(path, file) {
     })
 }
 
+async function deleteItem(path, reursive=false) {
+    let url = `${connectionString}${path}?recursive=${reursive}`
+    return fetch(url, {
+        method: 'DELETE'
+    })
+}
+
 const Filer = {
     getFiles,
     getContent,
-    uploadFile
+    uploadFile,
+    deleteItem
 }
 
 export default Filer

@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event'
 
 // to test
 import File from './File'
+import LocationContextWrapper from '../nav/LocationContextWrapper'
 
 const file = {
     "FullPath": "/example.log",
@@ -70,5 +71,38 @@ describe('<File>', function() {
             let contextMenu = screen.getByRole('menu', { name: "file context menu"})
             expect(contextMenu).not.toBeNull()
         })
+    })
+})
+
+describe("The <File>'s <RightClickMenu>", function() {
+    beforeEach(function() {
+        render(
+            <LocationContextWrapper>
+                <File
+                    data={file}
+                />
+            </LocationContextWrapper>
+        )
+        let fileButton = screen.getByRole('button', { name: file.name })
+        fireEvent.contextMenu(fileButton)
+    })
+    it('should allow the user to open the file', async function() {
+        window.open = jest.fn()
+        let button = screen.getByRole('menuitem', { name: "open file" })
+        userEvent.click(button)
+        await waitFor(() => {
+            expect(window.open).toHaveBeenCalled()
+        })
+    })  
+    it('should allow the user to delete the file', async function() {
+        global.fetch = jest.fn()
+        let button = screen.getByRole('menuitem', { name: "delete file" })
+        userEvent.click(button)
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
+    })
+    it('should allow the user to view the properties of the file', function() {
+        // TODO: implement
     })
 })

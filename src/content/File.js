@@ -16,16 +16,18 @@ import Divider from '@mui/material/Divider'
 import DescriptionIcon from '@mui/icons-material/Description'
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 import InfoIcon from '@mui/icons-material/Info'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
 
 // custom
-import { connectionString } from '../seaweed/filer'
+import Filer, { connectionString } from '../seaweed/filer'
+import { LocationContext } from '../nav/LocationContextWrapper'
 
 
 function RightClickMenu(props) {
-    const { open, close, download } = props
+    const { open, close, download, del } = props
     const { anchorElement } = props
 
     return (
@@ -41,11 +43,22 @@ function RightClickMenu(props) {
         >
             <MenuItem
                 onClick={download}
+                aria-label="open file"
             >
                 <ListItemIcon>
                     <DownloadForOfflineIcon />
                 </ListItemIcon>
                 <ListItemText>Download</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem
+                onClick={del}
+                aria-label="delete file"
+            >
+                <ListItemIcon>
+                    <DeleteIcon />
+                </ListItemIcon>
+                <ListItemText>Delete</ListItemText>
             </MenuItem>
             <Divider />
             <MenuItem >
@@ -62,6 +75,7 @@ function RightClickMenu(props) {
 function File(props) {
 
     const theme = useTheme()
+    const context = React.useContext(LocationContext)
 
     // double click
     const [isSelected, setIsSelected] = React.useState(false)
@@ -97,6 +111,11 @@ function File(props) {
         close()
     }
 
+    function del() {
+        Filer.deleteItem(props.data.FullPath)
+        context.refresh()
+    }
+
     return (
         <Grid
             item
@@ -126,6 +145,7 @@ function File(props) {
                 close={close}
                 anchorElement={anchorElement}
                 download={download}
+                del={del}
             />
         </Grid>
     )
