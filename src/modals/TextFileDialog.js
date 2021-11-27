@@ -13,7 +13,7 @@ import Button from '@mui/material/Button'
 // custom
 import Filer from '../seaweed/filer'
 import {LocationContext} from '../nav/LocationContextWrapper'
-import { getName, getFullPath } from '../seaweed/file'
+import { getFullPath } from '../seaweed/file'
 
 const blankForm = {
     name: '',
@@ -36,6 +36,7 @@ function TextFileDialog(props) {
         let fullPath = getFullPath(form.name, context.currentLocation)
         let file = new File([form.content], form.name, {type: "text/richtext"})
         await Filer.uploadFile(fullPath, file)
+        context.refresh()
         handleClose()
     }
 

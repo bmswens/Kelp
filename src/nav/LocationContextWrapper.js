@@ -13,6 +13,7 @@ function LocationContextWrapper(props) {
     const [locationState, setLocationState] = React.useState({
         currentLocation: '/',
         history: [],
+        refreshCount: 0
     })
 
     function updateLocation(newLocation) {
@@ -33,12 +34,20 @@ function LocationContextWrapper(props) {
         })
     }
 
+    function refresh() {
+        setLocationState({
+            ...locationState,
+            refreshCount: locationState.refreshCount + 1
+        })
+    }
+
     return (
         <LocationContext.Provider
             value={{
                 ...locationState,
                 updateLocation,
-                goBack
+                goBack,
+                refresh
             }}
         >
             {props.children}

@@ -18,7 +18,8 @@ describe('<TextFileModal>', function() {
             currentLocation: '/',
             history: [],
             updateLocation: jest.fn(),
-            goBack: jest.fn()
+            goBack: jest.fn(),
+            refresh: jest.fn()
         }
         render(
             <LocationContext.Provider value={locationState}>
