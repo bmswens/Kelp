@@ -26,6 +26,15 @@ async function uploadFile(path, file) {
     })
 }
 
+async function createFolder(path) {
+    if (!path.endsWith('/')) {
+        path += '/'
+    }
+    return fetch(`${connectionString}${path}`, {
+        method: 'POST',
+    })
+}
+
 async function deleteItem(path, reursive=false) {
     let url = `${connectionString}${path}?recursive=${reursive}`
     return fetch(url, {
@@ -37,6 +46,7 @@ const Filer = {
     getFiles,
     getContent,
     uploadFile,
+    createFolder,
     deleteItem
 }
 

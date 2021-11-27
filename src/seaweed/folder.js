@@ -33,6 +33,9 @@ class Folder {
             let parent = new Folder('..', {FullPath: parentName})
             this.entries.push(parent)
         }
+        if (data.Entries === null) {
+            data.Entries = []
+        }
         for (let obj of data.Entries) {
             if (obj.chunks) {
                 let file = new File(obj)

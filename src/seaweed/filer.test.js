@@ -45,6 +45,12 @@ describe('The Filer Object', function() {
         let response = await Filer.uploadFile('/example.txt', f)
         expect(response.ok).toBeTruthy()
     })
+    it('should be able to create a folder', async function() {
+        global.fetch = jest.fn().mockResolvedValue({ok: true})
+        let response = await Filer.createFolder('/new/folder')
+        expect(response.ok).toBeTruthy()
+        expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/new/folder/', {method: 'POST'})
+    })
     it('should be able to delete a file', async function() {
         global.fetch = jest.fn().mockResolvedValue({ok: true})
         let response = await Filer.deleteItem('/example.log')

@@ -17,6 +17,7 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 
 // custom
 import TextFileDialog from '../modals/TextFileDialog'
+import NewFolderDialog from '../modals/NewFolderDialog'
 
 
 function ActionsList(props) {
@@ -24,6 +25,7 @@ function ActionsList(props) {
     const [open, setOpen] = React.useState(false)
 
     const [createFileOpen, setCreateFileOpen] = React.useState(false)
+    const [createFolderOpen, setCreateFolderOpen] = React.useState(false)
 
     return (
         <React.Fragment>
@@ -63,6 +65,7 @@ function ActionsList(props) {
                         <ListItem
                             button
                             sx={{ pl: 4 }}
+                            onClick={() => setCreateFolderOpen(true)}
                         >
                             <ListItemIcon>
                                 <CreateNewFolderIcon />
@@ -77,6 +80,10 @@ function ActionsList(props) {
             <TextFileDialog
                 open={createFileOpen}
                 close={() => setCreateFileOpen(false)}
+            />
+            <NewFolderDialog
+                open={createFolderOpen}
+                close={() => setCreateFolderOpen(false)}
             />
         </React.Fragment>
     )
