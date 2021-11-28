@@ -16,45 +16,76 @@ import Divider from '@mui/material/Divider'
 import { Folder as FolderIcon } from '@mui/icons-material'
 import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser'
 import InfoIcon from '@mui/icons-material/Info'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
 
 // custom
 import { LocationContext } from '../nav/LocationContextWrapper'
+import Filer from '../seaweed/filer'
+import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
+
 
 
 function RightClickMenu(props) {
     const { open, close, enter } = props
     const { anchorElement } = props
 
+    // for deletion
+    const { del, name } = props
+    const [deleteItemOpen, setDeleteItemOpen] = React.useState(false)
+
+    function closeDelete() {
+        setDeleteItemOpen(false)
+    }
+
     return (
-        <Menu
-            aria-label="folder context menu"
-            role="menu"
-            anchorEl={anchorElement}
-            open={open}
-            onClose={close}
-            MenuListProps={{
-                'aria-labelledby': 'basic-button',
-            }}
-        >
-            <MenuItem
-                onClick={enter}
+        <React.Fragment>
+            <Menu
+                aria-label="folder context menu"
+                role="menu"
+                anchorEl={anchorElement}
+                open={open}
+                onClose={close}
             >
-                <ListItemIcon>
-                    <OpenInBrowserIcon />
-                </ListItemIcon>
-                <ListItemText>Open</ListItemText>
-            </MenuItem>
-            <Divider />
-            <MenuItem >
-                <ListItemIcon>
-                    <InfoIcon />
-                </ListItemIcon>
-                <ListItemText>Properties</ListItemText>
-            </MenuItem>
-        </Menu>
+                <MenuItem
+                    onClick={enter}
+                    aria-label="open folder"
+                >
+                    <ListItemIcon>
+                        <OpenInBrowserIcon />
+                    </ListItemIcon>
+                    <ListItemText>Open</ListItemText>
+                </MenuItem>
+                <Divider />
+                    <MenuItem
+                        onClick={() => {
+                            setDeleteItemOpen(true)
+                        }}
+                        aria-label="delete folder"
+                    >
+                        <ListItemIcon>
+                            <DeleteIcon />
+                        </ListItemIcon>
+                        <ListItemText>Delete</ListItemText>
+                    </MenuItem>
+                <Divider />
+                <MenuItem >
+                    <ListItemIcon>
+                        <InfoIcon />
+                    </ListItemIcon>
+                    <ListItemText>Properties</ListItemText>
+                </MenuItem>
+            </Menu>
+            <DeleteItemConfirmation
+                name={name}
+                del={del}
+                close={closeDelete}
+                open={deleteItemOpen}
+                isFile={false}
+            />
+        </React.Fragment>
     )
 }
 
@@ -98,6 +129,11 @@ function Folder(props) {
         close()
         context.updateLocation(props.data.FullPath)
     }
+
+    function del() {
+        Filer.deleteItem(props.data.FullPath, true)
+        context.refresh()
+    }
     
     return(
         <Grid 
@@ -129,6 +165,8 @@ function Folder(props) {
                 close={close}
                 anchorElement={anchorElement}
                 enter={enter}
+                del={del}
+                name={props.data.name}
             />
         </Grid>
     )

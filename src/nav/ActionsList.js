@@ -16,8 +16,8 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 
 // custom
-import TextFileDialog from '../modals/TextFileDialog'
-import NewFolderDialog from '../modals/NewFolderDialog'
+import TextFileDialog from '../dialogs/TextFileDialog'
+import NewFolderDialog from '../dialogs/NewFolderDialog'
 
 
 function ActionsList(props) {

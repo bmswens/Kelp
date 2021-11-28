@@ -24,50 +24,67 @@ import useDoubleClick from 'use-double-click'
 // custom
 import Filer, { connectionString } from '../seaweed/filer'
 import { LocationContext } from '../nav/LocationContextWrapper'
+import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
 
 
 function RightClickMenu(props) {
-    const { open, close, download, del } = props
+    const { open, close, download } = props
     const { anchorElement } = props
 
+    // for deletion
+    const { del, name } = props
+    const [deleteItemOpen, setDeleteItemOpen] = React.useState(false)
+
+    function closeDelete() {
+        setDeleteItemOpen(false)
+    }
+
     return (
-        <Menu
-            aria-label="file context menu"
-            role="menu"
-            anchorEl={anchorElement}
-            open={open}
-            onClose={close}
-            MenuListProps={{
-                'aria-labelledby': 'basic-button',
-            }}
-        >
-            <MenuItem
-                onClick={download}
-                aria-label="open file"
+        <React.Fragment>
+            <Menu
+                aria-label="file context menu"
+                role="menu"
+                anchorEl={anchorElement}
+                open={open}
+                onClose={close}
             >
-                <ListItemIcon>
-                    <DownloadForOfflineIcon />
-                </ListItemIcon>
-                <ListItemText>Download</ListItemText>
-            </MenuItem>
-            <Divider />
-            <MenuItem
-                onClick={del}
-                aria-label="delete file"
-            >
-                <ListItemIcon>
-                    <DeleteIcon />
-                </ListItemIcon>
-                <ListItemText>Delete</ListItemText>
-            </MenuItem>
-            <Divider />
-            <MenuItem >
-                <ListItemIcon>
-                    <InfoIcon />
-                </ListItemIcon>
-                <ListItemText>Properties</ListItemText>
-            </MenuItem>
-        </Menu>
+                <MenuItem
+                    onClick={download}
+                    aria-label="open file"
+                >
+                    <ListItemIcon>
+                        <DownloadForOfflineIcon />
+                    </ListItemIcon>
+                    <ListItemText>Download</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem
+                    onClick={() => {
+                        setDeleteItemOpen(true)
+                    }}
+                    aria-label="delete file"
+                >
+                    <ListItemIcon>
+                        <DeleteIcon />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem >
+                    <ListItemIcon>
+                        <InfoIcon />
+                    </ListItemIcon>
+                    <ListItemText>Properties</ListItemText>
+                </MenuItem>
+            </Menu>
+            <DeleteItemConfirmation
+                name={name}
+                del={del}
+                close={closeDelete}
+                open={deleteItemOpen}
+                isFile={true}
+            />
+        </React.Fragment>
     )
 }
 
@@ -146,6 +163,7 @@ function File(props) {
                 anchorElement={anchorElement}
                 download={download}
                 del={del}
+                name={props.data.name}
             />
         </Grid>
     )

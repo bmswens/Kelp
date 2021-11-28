@@ -2,11 +2,12 @@
 import React from 'react'
 
 // testing library
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // to test
 import Folder from './Folder'
+import LocationContextWrapper from '../nav/LocationContextWrapper'
 import { LocationContext } from '../nav/LocationContextWrapper'
 
 const folder = {
@@ -50,7 +51,7 @@ describe('<Folder>', function() {
             </LocationContext.Provider>
         )
     })
-    it('should display the name of the file', function() {
+    it('should display the name of the folder', function() {
         let title = screen.getByText('topics')
         expect(title).not.toBeNull()
     })
@@ -76,5 +77,45 @@ describe('<Folder>', function() {
             let contextMenu = screen.getByRole('menu', { name: "folder context menu"})
             expect(contextMenu).not.toBeNull()
         })
+    })
+})
+
+describe("The <Folder>'s <RightClickMenu>", function() {
+    let locationState 
+    beforeEach(function() {
+        locationState = {
+            currentLocation: '/new',
+            history: [],
+            updateLocation: jest.fn(),
+            goBack: jest.fn(),
+            refresh: jest.fn()
+        }
+        render(
+            <LocationContext.Provider value={locationState}>
+                <Folder
+                    data={folder}
+                />
+            </LocationContext.Provider>
+        )
+        let fileButton = screen.getByRole('button', { name: folder.name })
+        fireEvent.contextMenu(fileButton)
+    })
+    it('should allow the user to open the folder', async function() {
+        let button = screen.getByRole('menuitem', { name: "open folder" })
+        userEvent.click(button)
+        await waitFor(() => {
+            expect(locationState.updateLocation).toHaveBeenCalled()
+        })
+    })  
+    it('should allow the user to delete the file', async function() {
+        let button = screen.getByRole('menuitem', { name: "delete folder" })
+        userEvent.click(button)
+        await waitFor(() => {
+            let title = screen.getByRole('dialog', { name: 'Delete Folder'})
+            expect(title).not.toBeNull()
+        })
+    })
+    it('should allow the user to view the properties of the file', function() {
+        // TODO: implement
     })
 })

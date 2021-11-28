@@ -9,84 +9,86 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch'
 
 // custom
 import Filer from '../seaweed/filer'
 import {LocationContext} from '../nav/LocationContextWrapper'
 import { getFullPath } from '../seaweed/file'
 
+const blankForm = {
+    name: '',
+    content: ''
+}
 
-function NewFolderDialog(props) {
-
+function TextFileDialog(props) {
     const {open, close} = props
     const context = React.useContext(LocationContext)
     const theme = useTheme()
 
-    const [folder, setFolder] = React.useState('')
-    const [goTo, setGoTo] = React.useState(false)
+    const [form, setForm] = React.useState({...blankForm})
 
     function handleClose() {
-        setFolder('')
-        setGoTo(false)
+        setForm({...blankForm})
         close()
     }
 
     async function submit() {
-        let fullPath = getFullPath(folder, context.currentLocation)
-        await Filer.createFolder(fullPath)
+        let fullPath = getFullPath(form.name, context.currentLocation)
+        let file = new File([form.content], form.name, {type: "text/richtext"})
+        await Filer.uploadFile(fullPath, file)
         context.refresh()
-        if (goTo) {
-            context.updateLocation(fullPath)
-        }
         handleClose()
     }
 
     function isValid() {
-        return folder !== ''
+        return form.name !== '' && form.content !== ''
     }
 
-    return (
+    return(
         <Dialog
             open={open}
             onClose={handleClose}
+            fullWidth
         >
             <DialogTitle
                 align="center"
             >
-                Create Folder
+                Create File
             </DialogTitle>
             <DialogContent>
                 <TextField
                     required
                     fullWidth
                     sx={{marginTop: theme.spacing(1)}}
-                    label="Folder Name"
-                    inputProps={{"aria-label": "folder name"}}
+                    label="File Name"
+                    inputProps={{"aria-label": "file name"}}
                     role="textbox"
-                    value={folder}
+                    value={form.name}
                     onChange={(event) =>{
-                        setFolder(event.target.value)
+                        setForm({
+                            ...form,
+                            name: event.target.value
+                        })
                     }}
                 />
-                <FormGroup>
-                    <FormControlLabel
-                        sx={{marginTop: theme.spacing(1)}} 
-                        control={
-                            <Switch
-                                checked={goTo}
-                                onChange={event => {
-                                    setGoTo(event.target.checked)
-                                }}
-                                inputProps={{ "aria-label": "go to new folder"}}
-                            />
-                        } 
-                        label="Go To New Folder"
-                        labelPlacement="start"
-                    />
-                </FormGroup>
+                <TextField
+                    fullWidth
+                    required
+                    sx={{marginTop: theme.spacing(1)}}
+                    label="File Content"
+                    inputProps={{"aria-label": "file content"}}
+                    role="textbox"
+                    multiline
+                    maxRows={16}
+                    minRows={4}
+                    value={form.content}
+                    onChange={(event) =>{
+                        setForm({
+                            ...form,
+                            content: event.target.value
+                        })
+                    }}
+                />
             </DialogContent>
             <DialogActions>
                 <Button 
@@ -109,4 +111,4 @@ function NewFolderDialog(props) {
     )
 }
 
-export default NewFolderDialog
+export default TextFileDialog
