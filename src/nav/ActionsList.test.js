@@ -24,7 +24,7 @@ describe('<ActionsList>', function() {
     })
 })
 
-describe('<ActionsList>> expanded', function() {
+describe('<ActionsList> expanded', function() {
     beforeEach(() => {
         render(
             <ActionsList />
@@ -47,6 +47,16 @@ describe('<ActionsList>> expanded', function() {
         fireEvent.click(addFolderButton)
         await waitFor(() => {
             let dialog = screen.getByRole('dialog', { name: 'Create Folder'})
+            expect(dialog).not.toBeNull()
+        })
+        let cancelButton = screen.getByRole('button', { name: 'close' })
+        userEvent.click(cancelButton)
+    })
+    it('should have an upload button', async function() {
+        let addFolderButton = screen.getByRole('button', { name: 'Upload Files' })
+        fireEvent.click(addFolderButton)
+        await waitFor(() => {
+            let dialog = screen.getByRole('dialog', { name: 'Upload Files'})
             expect(dialog).not.toBeNull()
         })
         let cancelButton = screen.getByRole('button', { name: 'close' })

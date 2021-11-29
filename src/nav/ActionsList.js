@@ -14,10 +14,12 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 // custom
 import TextFileDialog from '../dialogs/TextFileDialog'
 import NewFolderDialog from '../dialogs/NewFolderDialog'
+import UploadFileDialog from '../dialogs/UploadFileDialog'
 
 
 function ActionsList(props) {
@@ -26,6 +28,7 @@ function ActionsList(props) {
 
     const [createFileOpen, setCreateFileOpen] = React.useState(false)
     const [createFolderOpen, setCreateFolderOpen] = React.useState(false)
+    const [uploadOpen, setUploadOpen] = React.useState(false)
 
     return (
         <React.Fragment>
@@ -74,6 +77,18 @@ function ActionsList(props) {
                                 primary="Create Folder"
                             />
                         </ListItem>
+                        <ListItem
+                            button
+                            sx={{ pl: 4 }}
+                            onClick={() => setUploadOpen(true)}
+                        >
+                            <ListItemIcon>
+                                <CloudUploadIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Upload Files"
+                            />
+                        </ListItem>
                     </List>
                 </Collapse>
             </List>
@@ -84,6 +99,10 @@ function ActionsList(props) {
             <NewFolderDialog
                 open={createFolderOpen}
                 close={() => setCreateFolderOpen(false)}
+            />
+            <UploadFileDialog
+                open={uploadOpen}
+                close={() => setUploadOpen(false)}
             />
         </React.Fragment>
     )

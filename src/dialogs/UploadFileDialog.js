@@ -10,41 +10,52 @@ import DialogActions from '@mui/material/DialogActions'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+// material-ui-dropzone
+import { DropzoneArea } from 'react-mui-dropzone'
+
 // custom
+import { LocationContext } from '../nav/LocationContextWrapper'
 import Filer from '../seaweed/filer'
-import {LocationContext} from '../nav/LocationContextWrapper'
 import { getFullPath } from '../seaweed/file'
 
-const blankForm = {
-    name: '',
-    content: ''
-}
 
-function TextFileDialog(props) {
+function UploadFileDialog(props) {
+
     const {open, close} = props
     const context = React.useContext(LocationContext)
     const theme = useTheme()
 
-    const [form, setForm] = React.useState({...blankForm})
+    const [files, setFiles] = React.useState([])
+    const [folder, setFolder] = React.useState('')
 
     function handleClose() {
-        setForm({...blankForm})
+        setFolder('')
+        setFiles([])
         close()
     }
 
     async function submit() {
-        let fullPath = getFullPath(form.name, context.currentLocation)
-        let file = new File([form.content], form.name, {type: "text/richtext"})
-        await Filer.uploadFile(fullPath, file)
+        let fullPath = getFullPath(folder, context.currentLocation)
+        for (let file of files) {
+            await Filer.uploadFile(fullPath, file)
+        }
         context.refresh()
         handleClose()
     }
 
     function isValid() {
-        return form.name !== '' && form.content !== ''
+        return files.length > 0
     }
 
-    return(
+    function handleNew(newFiles) {
+        let tempFiles = [...files]
+        for (let file of newFiles) {
+            tempFiles.push(file)
+        }
+        setFiles(tempFiles)
+    }
+
+    return (
         <Dialog
             open={open}
             onClose={handleClose}
@@ -54,41 +65,29 @@ function TextFileDialog(props) {
             <DialogTitle
                 align="center"
             >
-                Create File
+                Upload Files
             </DialogTitle>
             <DialogContent>
                 <TextField
-                    required
                     fullWidth
-                    sx={{marginTop: theme.spacing(1)}}
-                    label="File Name"
-                    inputProps={{"aria-label": "file name"}}
+                    sx={{
+                        marginTop: theme.spacing(1),
+                        marginBottom: theme.spacing(1)
+                    }}
+                    label="Folder Name"
+                    inputProps={{"aria-label": "folder name"}}
                     role="textbox"
-                    value={form.name}
+                    value={folder}
                     onChange={(event) =>{
-                        setForm({
-                            ...form,
-                            name: event.target.value
-                        })
+                        setFolder(event.target.value)
                     }}
                 />
-                <TextField
-                    fullWidth
-                    required
-                    sx={{marginTop: theme.spacing(1)}}
-                    label="File Content"
-                    inputProps={{"aria-label": "file content"}}
-                    role="textbox"
-                    multiline
-                    maxRows={16}
-                    minRows={4}
-                    value={form.content}
-                    onChange={(event) =>{
-                        setForm({
-                            ...form,
-                            content: event.target.value
-                        })
-                    }}
+                <DropzoneArea
+                    onAdd={handleNew}
+                    onDrop={handleNew}
+                    useChipsForPreview
+                    filesLimit={20}
+                    inputProps={{"aria-label": "upload input"}}
                 />
             </DialogContent>
             <DialogActions>
@@ -110,6 +109,7 @@ function TextFileDialog(props) {
             </DialogActions>
         </Dialog>
     )
+
 }
 
-export default TextFileDialog
+export default UploadFileDialog
