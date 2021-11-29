@@ -36,6 +36,9 @@ function UploadFileDialog(props) {
 
     async function submit() {
         let fullPath = getFullPath(folder, context.currentLocation)
+        if (!fullPath.endsWith('/')) {
+            fullPath += '/'
+        }
         for (let file of files) {
             await Filer.uploadFile(fullPath, file)
         }
