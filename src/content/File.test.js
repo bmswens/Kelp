@@ -94,13 +94,17 @@ describe("The <File>'s <RightClickMenu>", function() {
             expect(window.open).toHaveBeenCalled()
         })
     })  
-    it('should open the delete file dialog', async function() {
+    it('should open the delete file dialog and delete it', async function() {
+        global.fetch = jest.fn()
         let button = screen.getByRole('menuitem', { name: "delete file" })
         userEvent.click(button)
         await waitFor(() => {
             let title = screen.getByRole('dialog', { name: 'Delete File'})
             expect(title).not.toBeNull()
         })
+        let confirmButton = screen.getByRole('button', { name: 'confirm' })
+        userEvent.click(confirmButton)
+        expect(global.fetch).toHaveBeenCalled()
     })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement

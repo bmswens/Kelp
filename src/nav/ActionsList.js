@@ -40,7 +40,7 @@ function ActionsList(props) {
                     <ListItemText
                         primary="Actions"
                     />
-                    {open ? <ExpandLess /> : <ExpandMore />}
+                    {open ? <ExpandLess titleAccess="close actions" /> : <ExpandMore />}
                 </ListItem>
                 <Collapse 
                     in={open} 
@@ -59,7 +59,7 @@ function ActionsList(props) {
                                 <NoteAddIcon />      
                             </ListItemIcon>
                             <ListItemText
-                                primary="Add File"
+                                primary="Create File"
                             />
                         </ListItem>
                         <ListItem
@@ -71,7 +71,7 @@ function ActionsList(props) {
                                 <CreateNewFolderIcon />
                             </ListItemIcon>
                             <ListItemText
-                                primary="Add Folder"
+                                primary="Create Folder"
                             />
                         </ListItem>
                     </List>
