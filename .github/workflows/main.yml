@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: "true"
+      REACT_APP_FILER_PORT: 8888
+      REACT_APP_FILER_HOST: localhost
+      REACT_APP_FILER_SCHEME: http
+      REACT_APP_FILER_PATH: /
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
@@ -19,5 +23,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: mv example.env .env
     - run: npm run test:coverage
