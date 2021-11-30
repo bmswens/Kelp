@@ -19,4 +19,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: mv example.env .env
     - run: npm run test:coverage
