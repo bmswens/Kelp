@@ -5,7 +5,12 @@ import Folder from './folder'
 const host = process.env.REACT_APP_FILER_HOST
 const port = process.env.REACT_APP_FILER_PORT
 const connectionScheme = process.env.REACT_APP_FILER_SCHEME
-const connectionString = `${connectionScheme}://${host}:${port}`
+const filerPath = process.env.REACT_APP_FILER_PATH
+var connectionString = `${connectionScheme}://${host}:${port}`
+// 
+if (!['', '/'].includes(filerPath)) {
+    connectionString = filerPath
+}
 
 async function getFiles(path) {
     let folder = new Folder(path)

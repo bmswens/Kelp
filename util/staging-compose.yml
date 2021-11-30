@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  master:
+    image: chrislusf/seaweedfs:dev # use a remote dev image
+    command: "master -ip=master"
+  volume:
+    image: chrislusf/seaweedfs:dev # use a remote dev image
+    command: 'volume -mserver="master:9333" -port=8080 -ip=volume'
+    depends_on:
+      - master
+  filer:
+    image: chrislusf/seaweedfs:dev # use a remote dev image
+    command: 'filer -master="master:9333"'
+    depends_on:
+      - master
+      - volume
+  s3:
+    image: chrislusf/seaweedfs:dev # use a remote dev image
+    command: 's3 -filer="filer:8888"'
+    depends_on:
+      - master
+      - volume
+      - filer
+  webdav:
+    image: chrislusf/seaweedfs:dev # use a remote dev image
+    command: 'webdav -filer="filer:8888"'
+    depends_on:
+      - master
+      - volume
+      - filer
+  kelp:
+    image: kelp:dev
+    build:
+      context: ..
+      args:
+        - REACT_APP_FILER_PORT=${REACT_APP_FILER_PORT:-3000}
+        - REACT_APP_FILER_HOST=${REACT_APP_FILER_HOST:-localhost}
+        - REACT_APP_FILER_SCHEME=${REACT_APP_FILER_SCHEME:-http}
+        - REACT_APP_FILER_PATH=${REACT_APP_FILER_PATH:-/filer}
+  nginx:
+    image: nginx
+    depends_on:
+      - filer
+    ports:
+      - 3000:80
+    volumes:
+      - ../util/nginx.conf:/etc/nginx/nginx.conf

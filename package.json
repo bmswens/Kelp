@@ -20,7 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "docker-compose -f ./util/dev-compose.yml up -d && react-scripts start",
+    "start:staging": "docker-compose -f ./util/staging-compose.yml up --build",
     "build": "react-scripts build",
+    "build:docker": "docker build -t kelp:dev .",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
