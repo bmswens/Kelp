@@ -15,6 +15,16 @@ describe('<DragAndDropHandler>', function() {
         )
     })
     it('should allow the user to drag and drop files', async function() {
+        /* 
+            Disables the error console for this test only
+            There is a conflict in the MUI <DropzoneArea> between 
+            initialFiles={[file]} and unmounting
+            trying to set objectFiles to files causes it to not show up
+            in the GUI (but still upload)
+            React warns that this may cause a memory leak, will monitor
+        */
+        jest.spyOn(console, 'error').mockImplementation(() => {})
+
         let testFile = new File(['testing'], 'test.txt')
         let item = {
             kind: 'file',
