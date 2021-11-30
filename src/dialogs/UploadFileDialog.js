@@ -32,7 +32,7 @@ function UploadFileDialog(props) {
         if ( open && props.files !== undefined) {
             setFiles(props.files)
         }
-    }, [props.files])
+    }, [props.files, open])
 
     function handleClose() {
         setFolder('')
