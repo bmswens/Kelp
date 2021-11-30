@@ -28,6 +28,12 @@ function UploadFileDialog(props) {
     const [files, setFiles] = React.useState([])
     const [folder, setFolder] = React.useState('')
 
+    React.useEffect(() => {
+        if ( open && props.files !== undefined) {
+            setFiles(props.files)
+        }
+    }, [props.files])
+
     function handleClose() {
         setFolder('')
         setFiles([])
@@ -91,6 +97,7 @@ function UploadFileDialog(props) {
                     useChipsForPreview
                     filesLimit={20}
                     inputProps={{"aria-label": "upload input"}}
+                    fileObjects={files}
                 />
             </DialogContent>
             <DialogActions>

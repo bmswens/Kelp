@@ -9,6 +9,7 @@ import LocationContextWrapper from './nav/LocationContextWrapper'
 import TopNav from './nav/TopNav'
 import SideDrawer from './nav/SideDrawer'
 import FileExplorer from './content/FileExplorer'
+import DragAndDropHandler from './content/DragAndDropHandler'
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <TopNav />
         <SideDrawer />
         <FileExplorer />
+        <DragAndDropHandler />
       </ThemeProvider>
     </LocationContextWrapper>
   );
