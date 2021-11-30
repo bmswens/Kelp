@@ -18,6 +18,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
+    - run: yarn cache clean && yarn install
     - run: yarn run test:coverage
            echo test, and deploy your project.
