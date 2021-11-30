@@ -19,5 +19,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
-    - run: yarn test 
-          echo test, and deploy your project.
+    - run: yarn run test:coverage
+           echo test, and deploy your project.
