@@ -138,7 +138,7 @@ function Folder(props) {
     return(
         <Grid 
             item 
-            xs={3}
+            xs={2}
 
         >
             <IconButton
