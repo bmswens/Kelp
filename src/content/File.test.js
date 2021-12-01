@@ -32,7 +32,8 @@ const file = {
     "HardLinkCounter": 0,
     "Content": null,
     "Remote": null,
-    "name": "example.log"
+    "name": "example.log",
+    "isFile": true
 }
 
 

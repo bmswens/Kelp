@@ -5,17 +5,11 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import Drawer from '@mui/material/Drawer'
 import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
-
-// Matierial UI Icons
-import StarIcon from '@mui/icons-material/Star'
 
 // custom
 import ActionsList from './ActionsList'
+import FavoritesList from './FavoritesList'
 
 
 function DrawerHeader(props) {
@@ -55,18 +49,7 @@ function SideDrawer(props) {
             <DrawerHeader>
             </DrawerHeader>
             <Divider />
-            <List>
-                <ListItem
-                    button
-                >
-                    <ListItemIcon>
-                        <StarIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Favorites"
-                    />
-                </ListItem>
-            </List>
+            <FavoritesList />
             <Divider />
             <ActionsList />
         </Drawer>

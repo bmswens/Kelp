@@ -12,7 +12,7 @@ import Collapse from '@mui/material/Collapse'
 import CodeIcon from '@mui/icons-material/Code'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
