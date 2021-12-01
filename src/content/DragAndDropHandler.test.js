@@ -30,9 +30,8 @@ describe('<DragAndDropHandler>', function() {
             kind: 'file',
             getAsFile: () => testFile
         }
-        let dropzone = screen.getByLabelText('full page file dropzone')
-        fireEvent.dragOver(dropzone)
-        fireEvent.drop(dropzone, { dataTransfer: { items: [ item ]}})
+        fireEvent.dragOver(document)
+        fireEvent.drop(document, { dataTransfer: { items: [ item ]}})
         await waitFor(() => {
             let dialog = screen.getByRole('dialog', { name: 'Upload Files'})
             expect(dialog).not.toBeNull()
@@ -46,9 +45,8 @@ describe('<DragAndDropHandler>', function() {
             kind: 'not-file',
             getAsFile: () => testFile
         }
-        let dropzone = screen.getByLabelText('full page file dropzone')
-        fireEvent.dragOver(dropzone)
-        fireEvent.drop(dropzone, { dataTransfer: { items: [ item ]}})
+        fireEvent.dragOver(document)
+        fireEvent.drop(document, { dataTransfer: { items: [ item ]}})
         await waitFor(() => {
             let dialog = screen.queryByRole('dialog', { name: 'Upload Files'})
             expect(dialog).toBeNull()

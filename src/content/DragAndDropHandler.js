@@ -1,9 +1,6 @@
 // React
 import React from 'react'
 
-// Material UI
-import { Box } from '@mui/system'
-
 // custom
 import UploadFileDialog from '../dialogs/UploadFileDialog'
 
@@ -12,6 +9,11 @@ function DragAndDropHandler(props) {
 
     const [open, setOpen] = React.useState(false)
     const [files, setFiles] = React.useState([])
+
+    React.useEffect(() => {
+        document.addEventListener('drop', handleDrop)
+        document.addEventListener('dragover', handleDrag)
+    }, [])
 
     function close() {
         setFiles([])
@@ -41,20 +43,6 @@ function DragAndDropHandler(props) {
 
     return (
         <React.Fragment>
-            <Box
-                aria-label="full page file dropzone"
-                sx={{
-                    visbility: "hidden",
-                    height: "100vh",
-                    width: "100vw",
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    zIndex: -99
-                }}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-            />
             <UploadFileDialog
                 files={files}
                 open={open}
