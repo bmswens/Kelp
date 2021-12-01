@@ -2,12 +2,14 @@
 import React from 'react'
 
 // testing library
-import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+
+// localStorage hook
+import { useLocalStorage } from '@rehooks/local-storage'
 
 // to test
 import Folder from './Folder'
-import LocationContextWrapper from '../nav/LocationContextWrapper'
 import { LocationContext } from '../nav/LocationContextWrapper'
 
 const folder = {
@@ -107,7 +109,7 @@ describe("The <Folder>'s <RightClickMenu>", function() {
             expect(locationState.updateLocation).toHaveBeenCalled()
         })
     })  
-    it('should allow the user to delete the file', async function() {
+    it('should allow the user to delete the folder', async function() {
         global.fetch = jest.fn()
         let button = screen.getByRole('menuitem', { name: "delete folder" })
         userEvent.click(button)
@@ -118,6 +120,17 @@ describe("The <Folder>'s <RightClickMenu>", function() {
         let confirmButton = screen.getByRole('button', { name: 'confirm' })
         userEvent.click(confirmButton)
         expect(global.fetch).toHaveBeenCalled()
+    })
+    it('should allow the user to favorite a folder', function() {
+        let button = screen.getByRole('menuitem', { name: "favorite folder" })
+        userEvent.click(button)
+        let favoritesString = window.localStorage.getItem('favorites')
+        let favorites = JSON.parse(favoritesString)
+        expect(favorites).toEqual([{
+            fullPath: "/topics",
+            shortName: "topics",
+            isFile: false
+        }])
     })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement

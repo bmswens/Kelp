@@ -30,11 +30,12 @@ function RightClickMenu(props) {
     const { open, close, index } = props
     const { anchorElement } = props
 
+    const [favorites, setFavorites] = useLocalStorage('favorites', [])
+
     function remove() {
-        let favoritesString = window.localStorage.getItem('favorites')
-        let favorites = JSON.parse(favoritesString)
-        favorites.splice(index)
-        window.localStorage.setItem('favorites', JSON.stringify(favorites))
+        let tempFaves = [...favorites]
+        tempFaves.splice(index)
+        setFavorites(tempFaves)
         close()
     }
 

@@ -17,9 +17,13 @@ import { Folder as FolderIcon } from '@mui/icons-material'
 import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser'
 import InfoIcon from '@mui/icons-material/Info'
 import DeleteIcon from '@mui/icons-material/Delete'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
+
+// rehooks local storage
+import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import { LocationContext } from '../nav/LocationContextWrapper'
@@ -40,6 +44,9 @@ function RightClickMenu(props) {
         setDeleteItemOpen(false)
     }
 
+    // for favorite
+    const { favorite } = props
+
     return (
         <React.Fragment>
             <Menu
@@ -59,6 +66,15 @@ function RightClickMenu(props) {
                     <ListItemText>Open</ListItemText>
                 </MenuItem>
                 <Divider />
+                    <MenuItem
+                        onClick={favorite}
+                        aria-label="favorite folder"
+                    >
+                        <ListItemIcon>
+                            <BookmarkIcon />
+                        </ListItemIcon>
+                        <ListItemText>Favorite</ListItemText>
+                    </MenuItem>
                     <MenuItem
                         onClick={() => {
                             setDeleteItemOpen(true)
@@ -134,6 +150,21 @@ function Folder(props) {
         Filer.deleteItem(props.data.FullPath, true)
         context.refresh()
     }
+
+    // favorite
+    const [favorites, setFavorites] = useLocalStorage('favorites', [])
+
+    function favorite() {
+        setFavorites([
+            ...favorites,
+            {
+                fullPath: props.data.FullPath,
+                shortName: props.data.name,
+                isFile: false
+            }
+        ])
+        close()
+    }
     
     return(
         <Grid 
@@ -167,6 +198,7 @@ function Folder(props) {
                 enter={enter}
                 del={del}
                 name={props.data.name}
+                favorite={favorite}
             />
         </Grid>
     )

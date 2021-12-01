@@ -107,6 +107,17 @@ describe("The <File>'s <RightClickMenu>", function() {
         userEvent.click(confirmButton)
         expect(global.fetch).toHaveBeenCalled()
     })
+    it('should allow the user to favorite a folder', function() {
+        let button = screen.getByRole('menuitem', { name: "favorite file" })
+        userEvent.click(button)
+        let favoritesString = window.localStorage.getItem('favorites')
+        let favorites = JSON.parse(favoritesString)
+        expect(favorites).toEqual([{
+            fullPath: "/example.log",
+            shortName: "example.log",
+            isFile: true
+        }])
+    })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement
     })

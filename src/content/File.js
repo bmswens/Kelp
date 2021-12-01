@@ -17,9 +17,13 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 import InfoIcon from '@mui/icons-material/Info'
 import DeleteIcon from '@mui/icons-material/Delete'
+import BookmarkIcon from '@mui/icons-material/Bookmark'
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
+
+// rehooks local storage
+import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import Filer, { connectionString } from '../seaweed/filer'
@@ -38,6 +42,9 @@ function RightClickMenu(props) {
     function closeDelete() {
         setDeleteItemOpen(false)
     }
+
+    // for favorite
+    const { favorite } = props
 
     return (
         <React.Fragment>
@@ -58,6 +65,15 @@ function RightClickMenu(props) {
                     <ListItemText>Download</ListItemText>
                 </MenuItem>
                 <Divider />
+                <MenuItem
+                    onClick={favorite}
+                    aria-label="favorite file"
+                >
+                    <ListItemIcon>
+                        <BookmarkIcon />
+                    </ListItemIcon>
+                    <ListItemText>Favorite</ListItemText>
+                </MenuItem>
                 <MenuItem
                     onClick={() => {
                         setDeleteItemOpen(true)
@@ -99,10 +115,10 @@ function File(props) {
     const selfRef = React.useRef()
 
     useDoubleClick({
-        onSingleClick: function() {
+        onSingleClick: function () {
             setIsSelected(!isSelected)
         },
-        onDoubleClick: function() {
+        onDoubleClick: function () {
             download()
         },
         ref: selfRef
@@ -133,18 +149,33 @@ function File(props) {
         context.refresh()
     }
 
+    // favorite
+    const [favorites, setFavorites] = useLocalStorage('favorites', [])
+
+    function favorite() {
+        setFavorites([
+            ...favorites,
+            {
+                fullPath: props.data.FullPath,
+                shortName: props.data.name,
+                isFile: true
+            }
+        ])
+        close()
+    }
+
     return (
         <Grid
             item
             xs={2}
         >
             <IconButton
-                 ref={selfRef}
-                 sx={{
-                     background: isSelected ? theme.palette.info.main : theme.palette.background.default
-                 }}
-                 onContextMenu={rightClick}
-                 aria-label={`${isSelected ? "selected " : '' }${props.data.name}`}
+                ref={selfRef}
+                sx={{
+                    background: isSelected ? theme.palette.info.main : theme.palette.background.default
+                }}
+                onContextMenu={rightClick}
+                aria-label={`${isSelected ? "selected " : ''}${props.data.name}`}
             >
                 <DescriptionIcon fontSize="large" />
             </IconButton>
@@ -164,6 +195,7 @@ function File(props) {
                 download={download}
                 del={del}
                 name={props.data.name}
+                favorite={favorite}
             />
         </Grid>
     )
