@@ -18,7 +18,7 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import { Folder as FolderIcon } from '@mui/icons-material'
 
 // rehooks local storage
-// import { useLocalStorage } from '@rehooks/local-storage'
+import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import { LocationContext } from './LocationContextWrapper'
@@ -119,8 +119,7 @@ function FavoritesList(props) {
 
     const [open, setOpen] = React.useState(false)
 
-    // const [favorites] = useLocalStorage("favorites", [])
-    const favorites = []
+    const [favorites] = useLocalStorage("favorites", [])
 
     return (
         <List>

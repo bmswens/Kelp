@@ -2,8 +2,11 @@
 import React from 'react'
 
 // testing library
-import { render, screen, fireEvent, waitFor, act, cleanup } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+
+// help
+import { writeStorage } from '@rehooks/local-storage'
 
 // to test
 import { LocationContext } from './LocationContextWrapper'
@@ -130,7 +133,7 @@ describe('<FavoritesList> expanded, with items', function() {
     it('should update when a new favorite is added', async function() {
         let favoriteFolderButton = screen.queryByRole('button', { name: favoriteFolder.shortName})
         expect(favoriteFolderButton).toBeNull()
-        window.localStorage.setItem('favorites', JSON.stringify([favoriteFile, favoriteFolder]))
+        act(() => writeStorage('favorites', [favoriteFile, favoriteFolder]))
         await waitFor(() => {
             favoriteFolderButton = screen.getByRole('button', { name: favoriteFolder.shortName})
             expect(favoriteFolderButton).not.toBeNull()
