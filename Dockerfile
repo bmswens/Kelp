@@ -14,7 +14,7 @@ WORKDIR /app
 COPY ./package*.json ./
 RUN npm install
 COPY . ./
-RUN yarn build
+RUN npm build
 
 # final stage
 FROM node:14
