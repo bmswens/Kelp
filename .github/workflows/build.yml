@@ -3,9 +3,9 @@ name: Build
 on:
   workflow_run:
     workflows: ["Test"]
-    branches: [main]
     types:
       - completed
+
 jobs:
   on-success:
     env:
