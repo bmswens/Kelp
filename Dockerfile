@@ -11,9 +11,8 @@ ENV REACT_APP_FILER_HOST=$FILER_HOST \
     REACT_APP_FILER_SCHEME=$FILER_SCHEME
 
 WORKDIR /app
-COPY ./package.json ./
-COPY ./yarn.lock ./
-RUN yarn
+COPY ./package*.json ./
+RUN npm install
 COPY . ./
 RUN yarn build
 
