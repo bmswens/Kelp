@@ -34,9 +34,7 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: bmswens/kelp
-        tags: |
-          # minimal (short sha)
-          type=sha
+        tags: type=raw,value=amd64-{{sha}}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -47,7 +45,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-  arm32:
+  arm7:
     env:
       REACT_APP_FILER_PATH: /filer
     runs-on: self-hosted
@@ -74,15 +72,13 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: bmswens/kelp
-        tags: |
-          # minimal (short sha)
-          type=sha
+        tags: type=raw,value=arm7-{{sha}}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
         context: .
         push: true
-        platforms: linux/amd64
+        platforms: linux/arm/v7
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
