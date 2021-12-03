@@ -36,14 +36,14 @@ jobs:
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
-      env:
-        REACT_APP_FILER_PATH: /filer
       with:
         context: .
         push: true
         platforms: linux/amd64
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: 
+          - REACT_APP_FILER_PATH=/filer
 
   arm7:
     runs-on: self-hosted
@@ -74,11 +74,11 @@ jobs:
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
-      env:
-        REACT_APP_FILER_PATH: /filer
       with:
         context: .
         push: true
         platforms: linux/arm/v7
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: 
+          - REACT_APP_FILER_PATH=/filer
