@@ -13,7 +13,7 @@ ENV REACT_APP_FILER_HOST=$FILER_HOST \
 WORKDIR /app
 COPY ./package.json ./
 COPY ./yarn.lock ./
-RUN yarn
+RUN yarn install --network-concurrency 1
 COPY . ./
 RUN yarn build
 
