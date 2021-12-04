@@ -78,4 +78,28 @@ describe('<SelectionContextWrapper>', function() {
             expect(selected.innerHTML).toEqual('')
         })
     })
+    it('should open a dialog to delete selected files', async function() {
+        /* 
+            Has an issue with updated state on "unmounted" component.
+            If there is a memory leak, check this wrapper.
+        */
+        jest.spyOn(console, 'error').mockImplementation(() => {})
+        global.fetch = jest.fn()
+        let handleButton = screen.getByRole('button', { name: 'handle item'})
+        userEvent.click(handleButton)
+        await waitFor(() => {
+            let selected = screen.getByTestId('selected')
+            expect(selected.innerHTML).toEqual('/full/path')
+        })
+        fireEvent.keyDown(document, { code: "Delete" })
+        await waitFor(() => {
+            let title = screen.getByRole('dialog', { name: 'Delete Items'})
+            expect(title).not.toBeNull()
+        })
+        let confirmButton = screen.getByRole('button', { name: "confirm" })
+        userEvent.click(confirmButton)
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
+    })
 })

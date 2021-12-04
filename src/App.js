@@ -26,14 +26,14 @@ function App() {
   })
 
   return (
-    <ContextWrappers>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <ContextWrappers>
         <TopNav />
         <SideDrawer />
         <FileExplorer />
         <DragAndDropHandler />
-      </ThemeProvider>
-    </ContextWrappers>
+      </ContextWrappers>
+    </ThemeProvider>
   );
 }
 

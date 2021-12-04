@@ -3,6 +3,8 @@ import React from 'react'
 
 // custom
 import { LocationContext } from './LocationContextWrapper'
+import DeleteMultipleDialog from '../dialogs/DeleteMultipleDialog'
+import Filer from '../seaweed/filer'
 
 // location context
 const SelectionContext = React.createContext({
@@ -38,6 +40,25 @@ function SelectionContextWrapper(props) {
         clear()
     }, [locationContext.currentLocation])
 
+    // deletion of multiple
+    const [open, setOpen] = React.useState(false)
+
+    async function del() {
+        for (let item of selected) {
+            await Filer.deleteItem(item)
+        }
+        setSelected([])
+        locationContext.refresh()
+    }
+
+    function handleKeydown(event) {
+        if (event.code === "Delete" && selected.length) {
+            setOpen(true)
+        }
+    }
+
+    document.addEventListener('keydown', handleKeydown)
+
     return (
         <SelectionContext.Provider
             value={{
@@ -46,7 +67,13 @@ function SelectionContextWrapper(props) {
                 clear
             }}
         >
-                {props.children}
+            {props.children}
+            <DeleteMultipleDialog
+                files={selected}
+                del={del}
+                close={() => setOpen(false)}
+                open={open}
+            />
         </SelectionContext.Provider>
     )
 }

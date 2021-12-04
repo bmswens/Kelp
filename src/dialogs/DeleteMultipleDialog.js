@@ -54,7 +54,11 @@ function DeleteMultipleDialog(props) {
                 <DialogContentText>
                     Are you sure you want to permanently delete these {files.length} items?
                 </DialogContentText>
-                <Accordion>
+                <Accordion
+                    sx={{
+                        marginTop: theme.spacing(1)
+                    }}
+                >
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-label="show files"

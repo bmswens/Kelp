@@ -5,6 +5,9 @@ import React from 'react'
 const LocationContext = React.createContext({
     currentLocation: '/',
     history: [],
+    updateLocation: () => {},
+    goBack: () => {},
+    refresh: () => {}
 })
 
 
