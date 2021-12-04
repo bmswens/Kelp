@@ -6,7 +6,7 @@ import { render, screen, waitFor, cleanup, fireEvent, } from '@testing-library/r
 import userEvent from '@testing-library/user-event'
 
 // to test
-import {LocationContext} from '../nav/LocationContextWrapper'
+import {LocationContext} from '../context/LocationContextWrapper'
 import UploadFileDialog from './UploadFileDialog'
 
 describe('<UploadFileDialog>', function() {

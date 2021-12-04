@@ -26,7 +26,7 @@ import useDoubleClick from 'use-double-click'
 import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
-import { LocationContext } from '../nav/LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 import Filer from '../seaweed/filer'
 import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
 

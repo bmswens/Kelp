@@ -14,7 +14,7 @@ import Button from '@mui/material/Button'
 import { DropzoneArea } from 'react-mui-dropzone'
 
 // custom
-import { LocationContext } from '../nav/LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 import Filer from '../seaweed/filer'
 import { getFullPath } from '../seaweed/file'
 

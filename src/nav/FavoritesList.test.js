@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event'
 import { writeStorage } from '@rehooks/local-storage'
 
 // to test
-import { LocationContext } from './LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 import FavoritesList from './FavoritesList'
 import { FavoriteItem } from './FavoritesList'
 

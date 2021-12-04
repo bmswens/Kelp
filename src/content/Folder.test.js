@@ -10,7 +10,7 @@ import { useLocalStorage } from '@rehooks/local-storage'
 
 // to test
 import Folder from './Folder'
-import { LocationContext } from '../nav/LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 
 const folder = {
     "FullPath":"/topics",

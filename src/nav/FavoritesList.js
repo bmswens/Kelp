@@ -21,7 +21,7 @@ import { Folder as FolderIcon } from '@mui/icons-material'
 import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
-import { LocationContext } from './LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 import { connectionString } from '../seaweed/filer'
 
 

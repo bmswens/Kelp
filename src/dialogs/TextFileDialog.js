@@ -12,7 +12,7 @@ import Button from '@mui/material/Button'
 
 // custom
 import Filer from '../seaweed/filer'
-import {LocationContext} from '../nav/LocationContextWrapper'
+import {LocationContext} from '../context/LocationContextWrapper'
 import { getFullPath } from '../seaweed/file'
 
 const blankForm = {

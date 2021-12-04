@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event'
 
 // to test
 import File from './File'
-import LocationContextWrapper from '../nav/LocationContextWrapper'
+import LocationContextWrapper from '../context/LocationContextWrapper'
 
 const file = {
     "FullPath": "/example.log",

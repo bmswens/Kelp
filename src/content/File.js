@@ -27,7 +27,7 @@ import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import Filer, { connectionString } from '../seaweed/filer'
-import { LocationContext } from '../nav/LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
 
 

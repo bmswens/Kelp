@@ -6,7 +6,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 
 // to test
 import FileExplorer from './FileExplorer'
-import { LocationContext } from '../nav/LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 
 // mock
 import Filer from '../seaweed/filer'

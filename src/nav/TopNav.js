@@ -20,7 +20,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import HomeIcon from '@mui/icons-material/Home'
 
 // custom
-import { LocationContext } from './LocationContextWrapper'
+import { LocationContext } from '../context/LocationContextWrapper'
 
 function LeftButtonGroup(props) {
 

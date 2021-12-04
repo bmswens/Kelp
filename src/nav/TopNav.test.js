@@ -6,7 +6,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 // to test
 import TopNav from './TopNav'
-import LocationContextWrapper from './LocationContextWrapper'
+import LocationContextWrapper from '../context/LocationContextWrapper'
 
 describe('<TopNav>', function() {
     beforeEach(function () {

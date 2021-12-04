@@ -15,7 +15,7 @@ import Switch from '@mui/material/Switch'
 
 // custom
 import Filer from '../seaweed/filer'
-import {LocationContext} from '../nav/LocationContextWrapper'
+import {LocationContext} from '../context/LocationContextWrapper'
 import { getFullPath } from '../seaweed/file'
 
 
