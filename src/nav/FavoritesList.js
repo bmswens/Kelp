@@ -34,9 +34,7 @@ function RightClickMenu(props) {
 
     function remove() {
         let tempFaves = [...favorites]
-        console.log(tempFaves)
         tempFaves.splice(index, 1)
-        console.log(tempFaves)
         setFavorites(tempFaves)
         close()
     }
