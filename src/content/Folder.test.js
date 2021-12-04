@@ -11,6 +11,7 @@ import { useLocalStorage } from '@rehooks/local-storage'
 // to test
 import Folder from './Folder'
 import { LocationContext } from '../context/LocationContextWrapper'
+import SelectionContextWrapper from '../context/SelectionContextWrapper'
 
 const folder = {
     "FullPath":"/topics",
@@ -47,9 +48,11 @@ describe('<Folder>', function() {
         }
         render(
             <LocationContext.Provider value={locationState}>
-                <Folder
-                    data={folder}
-                />
+                <SelectionContextWrapper>
+                    <Folder
+                        data={folder}
+                    />
+                </SelectionContextWrapper>
             </LocationContext.Provider>
         )
     })
@@ -78,6 +81,38 @@ describe('<Folder>', function() {
         await waitFor(() => {
             let contextMenu = screen.getByRole('menu', { name: "folder context menu"})
             expect(contextMenu).not.toBeNull()
+        })
+    })
+})
+
+describe('parent ".." <Folder>', function() {
+    let locationState 
+    beforeEach(function() {
+        locationState = {
+            currentLocation: '/',
+            history: [],
+            updateLocation: jest.fn(),
+            goBack: jest.fn()
+        }
+        render(
+            <LocationContext.Provider value={locationState}>
+                <SelectionContextWrapper>
+                    <Folder
+                        data={{
+                            ...folder,
+                            name: ".."
+                        }}
+                    />
+                </SelectionContextWrapper>
+            </LocationContext.Provider>
+        )
+    })
+    it('should become selected when single clicked', async function() {
+        let button = screen.getByRole('button', { name: ".." })
+        userEvent.click(button)
+        await waitFor(() => {
+            let selectedButton = screen.queryByRole('button', { name: `selected ${folder.name}` })
+            expect(selectedButton).toBeNull()
         })
     })
 })

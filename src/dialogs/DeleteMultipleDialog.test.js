@@ -6,36 +6,43 @@ import { render, screen, waitFor, cleanup, fireEvent, } from '@testing-library/r
 import userEvent from '@testing-library/user-event'
 
 // to test
-import DeleteItemConfirmation from './DeleteItemConfirmation'
+import DeleteMultipleDialog from './DeleteMultipleDialog'
 
-
-describe('<DeleteItemConfirmation> for files', function() {
+describe('<DeleteMultipleDialog>', function() {
     let del
     let close
-    let name
+    let files
     beforeEach(() => {
         del = jest.fn()
         close = jest.fn()
-        name = 'example.log'
+        files = ["/thing1.txt", "/thing2.txt"]
         render(
-            <DeleteItemConfirmation
+            <DeleteMultipleDialog
                 name={name}
                 del={del}
                 close={close}
                 open={true}
-                isFile={true}
+                files={files}
             />
         )
     })
     it('should display the title "Delete File"', function() {
-        let title = screen.getByRole('dialog', { name: 'Delete File'})
+        let title = screen.getByRole('dialog', { name: 'Delete Items'})
         expect(title).not.toBeNull()
     })
     it('should display the warning text', function() {
-        let text = screen.getByText('Are you sure you want to permanently delete this file?')
+        let text = screen.getByText(`Are you sure you want to permanently delete these ${files.length} items?`)
         expect(text).not.toBeNull()
-        let foundName = screen.getByText(name)
-        expect(foundName).not.toBeNull()
+    })
+    it('should display all the files when accordion opened', async function() {
+        let expandButton = screen.getByRole('button', { name: "show files" })
+        userEvent.click(expandButton)
+        await waitFor(() => {
+            for (let item of files) {
+                let itemText = screen.getByText(item)
+                expect(itemText).not.toBeNull()
+            }
+        })
     })
     it('should close when "cancel" button selected', async function() {
         let cancelButton = screen.getByRole('button', { name: 'cancel' })
@@ -52,7 +59,3 @@ describe('<DeleteItemConfirmation> for files', function() {
         })
     })
 })
-
-// describe('<DeleteItemConfirmation> for folders', function() {
-
-// })
