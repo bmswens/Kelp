@@ -5,7 +5,7 @@ import React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 // Custom
-import LocationContextWrapper from './context/LocationContextWrapper'
+import ContextWrappers from './context/ContextWrappers'
 import TopNav from './nav/TopNav'
 import SideDrawer from './nav/SideDrawer'
 import FileExplorer from './content/FileExplorer'
@@ -26,14 +26,14 @@ function App() {
   })
 
   return (
-    <LocationContextWrapper>
+    <ContextWrappers>
       <ThemeProvider theme={theme}>
         <TopNav />
         <SideDrawer />
         <FileExplorer />
         <DragAndDropHandler />
       </ThemeProvider>
-    </LocationContextWrapper>
+    </ContextWrappers>
   );
 }
 
