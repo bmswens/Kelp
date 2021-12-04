@@ -9,8 +9,8 @@ import Filer from '../seaweed/filer'
 // location context
 const SelectionContext = React.createContext({
     selected: [],
-    handle: () => {},
-    clear: () => {}
+    handle: /* istanbul ignore next */ () => {},
+    clear: /* istanbul ignore next */ () => {}
 })
 
 
