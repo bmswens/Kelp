@@ -29,6 +29,7 @@ import { useLocalStorage } from '@rehooks/local-storage'
 import Filer, { connectionString } from '../seaweed/filer'
 import { LocationContext } from '../context/LocationContextWrapper'
 import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
+import { SelectionContext } from '../context/SelectionContextWrapper'
 
 
 function RightClickMenu(props) {
@@ -109,14 +110,15 @@ function File(props) {
 
     const theme = useTheme()
     const context = React.useContext(LocationContext)
+    const selectionContext = React.useContext(SelectionContext)
 
     // double click
-    const [isSelected, setIsSelected] = React.useState(false)
+    const isSelected = selectionContext.selected.includes(props.data.FullPath)
     const selfRef = React.useRef()
 
     useDoubleClick({
         onSingleClick: function () {
-            setIsSelected(!isSelected)
+            selectionContext.handle(props.data.FullPath)
         },
         onDoubleClick: function () {
             download()

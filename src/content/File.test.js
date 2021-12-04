@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event'
 // to test
 import File from './File'
 import LocationContextWrapper from '../context/LocationContextWrapper'
+import SelectionContextWrapper from '../context/SelectionContextWrapper'
 
 const file = {
     "FullPath": "/example.log",
@@ -40,9 +41,11 @@ const file = {
 describe('<File>', function() {
     beforeEach(function() {
         render(
-            <File
-                data={file}
-            />
+            <SelectionContextWrapper>
+                <File
+                    data={file}
+                />
+            </SelectionContextWrapper>
         )
     })
     it('should display the name of the file', function() {
