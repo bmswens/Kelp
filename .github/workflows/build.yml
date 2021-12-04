@@ -32,7 +32,7 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: bmswens/kelp
-        tags: type=raw,value=amd64-{{sha}}
+        tags: type=raw,value={{sha}}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
