@@ -28,6 +28,7 @@
 | -------- | :------: | ----------- |
 | Download | **Enter** | False |
 | Delete | **Delete** | True |
+| Select All | **Ctrl + a** | False|
 | Copy | **Ctrl + c** | False |
 | Cut | **Ctrl + x** | False |
 | Paste | **Ctrl + v** | False|
