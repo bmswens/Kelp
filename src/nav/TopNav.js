@@ -73,7 +73,12 @@ function LocationBar(props) {
     const selfRef = React.useRef(null)
 
     function handleShortcuts(event) {
-        let isValidToContinue = selfRef.current !== null && document.activeElement !== selfRef.current && event.key === "/"
+        let isValidToContinue = 
+            selfRef.current !== null &&
+            document.activeElement !== selfRef.current && 
+            event.key === "/" &&
+            (event.ctrlKey || event.altKey)
+
         if (isValidToContinue) {
             event.preventDefault()
             selfRef.current.focus()
