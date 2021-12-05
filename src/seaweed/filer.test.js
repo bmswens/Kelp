@@ -64,3 +64,24 @@ describe('The Filer Object', function() {
         expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/newItems?recursive=true', {method: 'DELETE'})
     })
 })
+
+describe('connectionString', function () {
+    const OLD_ENV = process.env
+    beforeEach(() => {
+        jest.resetModules() // Most important - it clears the cache
+        process.env = { ...OLD_ENV }; // Make a copy
+    })
+
+    afterAll(() => {
+        process.env = OLD_ENV; // Restore old environment
+    })
+    it('should have a default', function () {
+        const masterConnectionString = require('./filer').connectionString
+        expect(masterConnectionString).toEqual('http://localhost:8888')
+    })
+    it('should change if REACT_APP_MASTER_PATH', function() {
+        process.env.REACT_APP_FILER_PATH = '/filer'
+        const masterConnectionString = require('./filer').connectionString
+        expect(masterConnectionString).toEqual('/filer')
+    })
+})

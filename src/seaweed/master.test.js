@@ -292,7 +292,7 @@ const response = {
 }
 
 describe('Master.getClusterInfo()', function () {
-    it('should return a more concise response of cluster info', async function() {
+    it('should return a more concise response of cluster info', async function () {
         let requiredKeys = [
             "version",
             "freeVolumes",
@@ -302,10 +302,31 @@ describe('Master.getClusterInfo()', function () {
             "nodes",
             "size"
         ]
-        global.fetch = jest.fn().mockResolvedValue({ json: () => response})
+        global.fetch = jest.fn().mockResolvedValue({ json: () => response })
         let clusterInfo = await Master.getClusterInfo()
         for (let key of requiredKeys) {
             expect(clusterInfo[key]).not.toEqual(undefined)
         }
+    })
+})
+
+describe('masterConnectionString', function () {
+    const OLD_ENV = process.env
+    beforeEach(() => {
+        jest.resetModules() // Most important - it clears the cache
+        process.env = { ...OLD_ENV }; // Make a copy
+    })
+
+    afterAll(() => {
+        process.env = OLD_ENV; // Restore old environment
+    })
+    it('should have a default', function () {
+        const masterConnectionString = require('./master').masterConnectionString
+        expect(masterConnectionString).toEqual('http://localhost:9333')
+    })
+    it('should change if REACT_APP_MASTER_PATH', function() {
+        process.env.REACT_APP_MASTER_PATH = '/master'
+        const masterConnectionString = require('./master').masterConnectionString
+        expect(masterConnectionString).toEqual('/master')
     })
 })
