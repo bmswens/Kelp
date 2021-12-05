@@ -21,6 +21,7 @@ import HomeIcon from '@mui/icons-material/Home'
 
 // custom
 import { LocationContext } from '../context/LocationContextWrapper'
+import Settings from './Settings'
 
 function LeftButtonGroup(props) {
 
@@ -123,16 +124,6 @@ function LocationBar(props) {
                 }
             }}
         />
-    )
-}
-
-function Settings(props) {
-    return (
-        <IconButton>
-            <SettingsIcon
-                fontSize="large"
-            />
-        </IconButton>
     )
 }
 
