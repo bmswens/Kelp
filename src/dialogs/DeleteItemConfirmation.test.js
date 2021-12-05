@@ -65,6 +65,13 @@ describe('<DeleteItemConfirmation> for files', function() {
             expect(close).toHaveBeenCalled()
         })
     })
+    it('should ignore other keys', async function() {
+        let title = screen.getByRole('dialog', { name: 'Delete File'})
+        fireEvent.keyDown(title, { code: "KeyZ" })
+        await waitFor(() => {
+            expect(close).not.toHaveBeenCalled()
+        })
+    })
 })
 
 // describe('<DeleteItemConfirmation> for folders', function() {

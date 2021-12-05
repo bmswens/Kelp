@@ -72,4 +72,11 @@ describe('<DeleteMultipleDialog>', function() {
             expect(close).toHaveBeenCalled()
         })
     })
+    it('should ignore other keys', async function() {
+        let title = screen.getByRole('dialog', { name: 'Delete Items'})
+        fireEvent.keyDown(title, { code: "KeyZ" })
+        await waitFor(() => {
+            expect(close).not.toHaveBeenCalled()
+        })
+    })
 })
