@@ -13,7 +13,8 @@
 ## Navigation
 | Function | Shortcut | Implemented |
 | -------- | :------: | ----------- |
-| Focus directory input | **/** | False |
+| Focus directory input | **/** | True |
+| Focus directory input from root | **Alt + /** | True |
 
 ## Dialogs
 ### Confirmation Dialogs

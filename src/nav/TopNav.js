@@ -69,8 +69,25 @@ function LocationBar(props) {
         setInputContent(context.currentLocation)
     }, [context])
 
+    // shortcuts
+    const selfRef = React.useRef(null)
+
+    function handleShortcuts(event) {
+        let isValidToContinue = selfRef.current !== null && document.activeElement !== selfRef.current && event.key === "/"
+        if (isValidToContinue) {
+            event.preventDefault()
+            selfRef.current.focus()
+            if (event.altKey) {
+                setInputContent('/')
+            }
+        }
+    }
+
+    document.addEventListener('keydown', handleShortcuts)
+
     return (
         <OutlinedInput
+            inputProps={{ ref: selfRef }}
             size="small"
             value={inputContent}
             sx={{
