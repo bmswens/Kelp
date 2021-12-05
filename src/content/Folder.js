@@ -79,6 +79,7 @@ function RightClickMenu(props) {
                     <MenuItem
                         onClick={() => {
                             setDeleteItemOpen(true)
+                            close()
                         }}
                         aria-label="delete folder"
                     >

@@ -33,11 +33,21 @@ function DeleteItemConfirmation(props) {
         close()
     }
 
+    function handleShortcuts(event) {
+        if (event.code === "KeyY") {
+            handleConfirm()
+        }
+        else if (event.code === "KeyN") {
+            close()
+        }
+    }
+
     return (
         <Dialog
             open={open}
             onClose={close}
             fullWidth
+            onKeyDown={handleShortcuts}
         >
             <DialogTitle
                 align="center"

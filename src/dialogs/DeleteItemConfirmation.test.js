@@ -51,6 +51,20 @@ describe('<DeleteItemConfirmation> for files', function() {
             expect(del).toHaveBeenCalled()
         })
     })
+    it('should have a confirm shortcut', async function() {
+        let title = screen.getByRole('dialog', { name: 'Delete File'})
+        fireEvent.keyDown(title, { code: "KeyY" })
+        await waitFor(() => {
+            expect(del).toHaveBeenCalled()
+        })
+    })
+    it('should have a cancel shortcut', async function() {
+        let title = screen.getByRole('dialog', { name: 'Delete File'})
+        fireEvent.keyDown(title, { code: "KeyN" })
+        await waitFor(() => {
+            expect(close).toHaveBeenCalled()
+        })
+    })
 })
 
 // describe('<DeleteItemConfirmation> for folders', function() {

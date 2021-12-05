@@ -19,8 +19,8 @@
 ### Confirmation Dialogs
 | Function | Shortcut | Implemented |
 | -------- | :------: | ----------- |
-| Confirm | **y** | False |
-| Cancel | **n** | False |
+| Confirm | **y** | True |
+| Cancel | **n** | True |
 
 ## Selection
 | Function | Shortcut | Implemented |
