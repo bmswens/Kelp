@@ -64,7 +64,7 @@ describe('<TopNav>', function() {
         expect(locationState.updateLocation).toHaveBeenCalled()
     })
     it('should have a shortcut to focus location bar', async function() {
-        fireEvent.keyDown(document, { key: "/", ctrLKey: true})
+        fireEvent.keyDown(document, { key: "/", ctrlKey: true})
         userEvent.type(document.activeElement, 'home/bmswens') 
         userEvent.type(document.activeElement, '{enter}')
         await waitFor(() => {
