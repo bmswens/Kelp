@@ -14,7 +14,6 @@ import Button from '@mui/material/Button'
 import { CssBaseline } from '@mui/material'
 
 // Material UI Icons
-import SettingsIcon from '@mui/icons-material/Settings'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import HomeIcon from '@mui/icons-material/Home'

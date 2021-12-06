@@ -291,6 +291,10 @@ const response = {
     }
 }
 
+function mockMaster() {
+    global.fetch = jest.fn().mockResolvedValue({ json: () => response })
+}
+
 describe('Master.getClusterInfo()', function () {
     it('should return a more concise response of cluster info', async function () {
         let requiredKeys = [
@@ -302,7 +306,7 @@ describe('Master.getClusterInfo()', function () {
             "nodes",
             "size"
         ]
-        global.fetch = jest.fn().mockResolvedValue({ json: () => response })
+        mockMaster()
         let clusterInfo = await Master.getClusterInfo()
         for (let key of requiredKeys) {
             expect(clusterInfo[key]).not.toEqual(undefined)
@@ -330,3 +334,6 @@ describe('masterConnectionString', function () {
         expect(masterConnectionString).toEqual('/master')
     })
 })
+
+
+export { mockMaster }

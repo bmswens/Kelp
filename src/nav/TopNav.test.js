@@ -8,10 +8,12 @@ import userEvent from '@testing-library/user-event'
 // to test
 import TopNav from './TopNav'
 import { LocationContext } from '../context/LocationContextWrapper'
+import { mockMaster } from '../seaweed/master.test'
 
 describe('<TopNav>', function() {
     let locationState
     beforeEach(function () {
+        mockMaster()
         locationState = {
             currentLocation: "/",
             history: ["/past/locations"],

@@ -9,7 +9,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import Button from '@mui/material/Button'
-
+import { Box } from '@mui/material'
 
 
 function KelpInfoDialog(props) {
@@ -30,7 +30,9 @@ function KelpInfoDialog(props) {
                 Kelp Info
             </DialogTitle>
             <DialogContent>
-                
+                <Box sx={{ display: "flex", justifyContent: 'center' }}>
+                    <img height="256px" src={process.env.PUBLIC_URL + '/kelp.png'} />
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Button 
