@@ -44,4 +44,5 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           REACT_APP_FILER_PATH=/filer
+          REACT_APP_KELP_VERSION=${{ github.sha }}
 

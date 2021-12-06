@@ -1,9 +1,12 @@
 # build stage
 FROM node:14 as build
 
+ARG VERSION_INFO=DEV
+
 # default env
 ENV REACT_APP_FILER_PATH=/filer \
-    REACT_APP_MASTER_PATH=/master
+    REACT_APP_MASTER_PATH=/master \
+    REACT_APP_KELP_VERSION=${VERSION_INFO}
 
 WORKDIR /app
 COPY ./package.json ./
