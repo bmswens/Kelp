@@ -34,6 +34,10 @@ jobs:
         images: bmswens/kelp
         tags: type=raw,value={{sha}}
 
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
@@ -44,5 +48,5 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           REACT_APP_FILER_PATH=/filer
-          VERSION_INFO=${{ github.sha }}
+          VERSION_INFO=${{ steps.vars.outputs.sha_short }}
 
