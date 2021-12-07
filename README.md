@@ -1,6 +1,7 @@
 # Kelp
 
 [![Test](https://github.com/bmswens/Kelp/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/bmswens/Kelp/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/bmswens/Kelp/badge.svg?branch=master)](https://coveralls.io/github/bmswens/Kelp?branch=master)
 [![Docker Build](https://img.shields.io/badge/Docker%20Build-Automated-brightgreen)](https://github.com/bmswens/Kelp/actions/workflows/build.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/bmswens/kelp)](https://hub.docker.com/repository/docker/bmswens/kelp)
 [![Liscense](https://img.shields.io/github/license/bmswens/kelp)](https://github.com/bmswens/Kelp/blob/master/LICENSE.txt)
