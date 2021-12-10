@@ -19,6 +19,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 // custom
 import ClusterInfoDialog from '../dialogs/ClusterInfoDialog'
 import KelpInfoDialog from '../dialogs/KelpInfoDialog'
+import SettingsDialog from '../dialogs/SettingsDialog'
 
 
 function SettingsMenu(props) {
@@ -28,6 +29,18 @@ function SettingsMenu(props) {
 
     function openHelp() {
         window.open('https://github.com/bmswens/Kelp/blob/master/docs/shortcuts-and-hotkeys.md', "_blank")
+    }
+
+    // settings stuff
+    const [settingsOpen, setSettingsOpen] = React.useState(false)
+
+    function openSettings() {
+        close()
+        setSettingsOpen(true)
+    }
+
+    function closeSettings() {
+        setSettingsOpen(false)
     }
 
     // cluster stuff
@@ -65,6 +78,7 @@ function SettingsMenu(props) {
             >
                 <MenuItem
                     aria-label="open settings"
+                    onClick={openSettings}
                 >
                     <ListItemIcon>
                         <SettingsIcon />
@@ -108,6 +122,10 @@ function SettingsMenu(props) {
             <KelpInfoDialog
                 open={kelpInfoOpen}
                 close={closeKelpInfo}
+            />
+            <SettingsDialog
+                open={settingsOpen}
+                close={closeSettings}
             />
         </React.Fragment>
     )

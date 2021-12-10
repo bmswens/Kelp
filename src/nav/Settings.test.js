@@ -31,7 +31,12 @@ describe('<Settings> menu', function() {
         userEvent.click(button)
     })
     it('should have a button to open the settings menus', function() {
-        // TODO: implement
+        let button = screen.getByRole('menuitem', { name: "open settings" })
+        userEvent.click(button)
+        let dialog = screen.getByRole('dialog', { name: "Settings" })
+        expect(dialog).not.toBeNull()
+        let closeButton = screen.getByRole('button', { name: "close"})
+        userEvent.click(closeButton)
     })
     it('should have a button to open help', function() {
         window.open = jest.fn()
