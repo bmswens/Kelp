@@ -14,6 +14,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import HelpIcon from '@mui/icons-material/Help'
 import StorageIcon from '@mui/icons-material/Storage'
 import InfoIcon from '@mui/icons-material/Info'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 // custom
 import ClusterInfoDialog from '../dialogs/ClusterInfoDialog'
@@ -132,7 +133,7 @@ function Settings(props) {
                 onClick={openMenu}
                 aria-label="settings"
             >
-                <SettingsIcon
+                <MoreVertIcon
                     fontSize="large"
                 />
             </IconButton>
