@@ -312,6 +312,12 @@ describe('Master.getClusterInfo()', function () {
             expect(clusterInfo[key]).not.toEqual(undefined)
         }
     })
+    it('should gracefully catch errors in dev', async function() {
+        console.log = jest.fn()
+        let clusterInfo = await Master.getClusterInfo()
+        expect(clusterInfo).toEqual({})
+        expect(console.log).toHaveBeenCalled()
+    })
 })
 
 describe('masterConnectionString', function () {

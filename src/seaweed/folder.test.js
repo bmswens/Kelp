@@ -49,4 +49,10 @@ describe('The Folder Object', function() {
         expect(entries).toHaveLength(3)
         expect(entries[0].name).toEqual('..')
     })
+    it("shouldn't fail on bad response", async function() {
+        global.fetch = jest.fn().mockResolvedValue({json: () => {return {Entries: null}}})
+        let f = new Folder('/')
+        let entries = await f.getContent()
+        expect(entries.length).toEqual(0)
+    })
 })
