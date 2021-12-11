@@ -1,5 +1,5 @@
 # build stage
-FROM node:14 as build
+FROM node:16 as build
 
 ARG VERSION_INFO=DEV
 
@@ -11,7 +11,10 @@ ENV REACT_APP_FILER_PATH=/filer \
 WORKDIR /app
 COPY ./package.json ./
 COPY ./yarn.lock ./
-RUN yarn install --network-concurrency 1 --network-timeout 300000
+COPY ./.yarnrc.yml ./
+COPY ./.yarn/releases/yarn-3.1.1.cjs ./.yarn/releases/
+RUN yarn set version berry
+RUN yarn install --network-timeout 300000
 COPY . ./
 RUN yarn build
 
