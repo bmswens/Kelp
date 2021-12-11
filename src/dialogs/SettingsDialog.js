@@ -113,3 +113,4 @@ function SettingsDialog(props) {
 }
 
 export default SettingsDialog
+export { defaultSettings }

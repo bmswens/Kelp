@@ -54,5 +54,6 @@
       "index.js",
       "reportWebVitals.js"
     ]
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }

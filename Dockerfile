@@ -11,7 +11,7 @@ ENV REACT_APP_FILER_PATH=/filer \
 WORKDIR /app
 COPY ./package.json ./
 COPY ./yarn.lock ./
-RUN yarn install --network-concurrency 1 --network-timeout 120000
+RUN yarn
 COPY . ./
 RUN yarn build
 
