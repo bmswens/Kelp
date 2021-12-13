@@ -14,6 +14,10 @@
 
 Kelp is a web-based GUI for SeaweedFS, meant to emulate the look and feel of a native file explorer.
 
+## Kelp In Action
+
+[![Kelp Demo](https://img.youtube.com/vi/oHM-uwtsFUQ/0.jpg)](https://youtu.be/oHM-uwtsFUQ)
+
 ## Getting Started
 
 ### Requirements
@@ -21,6 +25,7 @@ Kelp is a web-based GUI for SeaweedFS, meant to emulate the look and feel of a n
  * NodeJS
  * docker
  * docker-compose
+
 
 ### Dev
 
