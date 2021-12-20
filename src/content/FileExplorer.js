@@ -15,12 +15,14 @@ import Folder from './Folder'
 import { LocationContext } from '../context/LocationContextWrapper'
 import Filer from '../seaweed/filer'
 import { defaultSettings } from '../dialogs/SettingsDialog'
+import DetailsView from './DetailsView'
 
 
 function FileExplorer(props) {
 
     const context = React.useContext(LocationContext)
     const [ content, setContent ] = React.useState([])
+    const [ files, setFiles ] = React.useState([])
 
     // settings
     const [settings] = useLocalStorage("settings", defaultSettings)
@@ -28,8 +30,9 @@ function FileExplorer(props) {
     React.useEffect(function() {
         async function loadFiles() {
             let output = []
-            let files = await Filer.getFiles(context.currentLocation)
-            for (let obj of files) {
+            let tempFiles = await Filer.getFiles(context.currentLocation)
+            let outputFiles = []
+            for (let obj of tempFiles) {
                 if (!settings.showDotFiles && obj.name.startsWith('.')) {
                     continue
                 }
@@ -39,8 +42,10 @@ function FileExplorer(props) {
                 else {
                     output.push(<Folder data={obj} key={obj.name} />)
                 }
+                outputFiles.push(obj)
             }
             setContent(output)
+            setFiles(outputFiles)
         }
         loadFiles()
     }, [context, settings])
@@ -53,11 +58,18 @@ function FileExplorer(props) {
             <Grid 
                 container 
                 spacing={2} 
-                sx={{ marginLeft: "240px", width: "calc(100vw - 240px)", 
-                paddingTop: "7px"}} 
+                sx={{ 
+                    marginLeft: "240px", 
+                    width: "calc(100vw - 240px)", 
+                    paddingTop: "15px",
+                    height: "calc(100vh - 64px)"
+                }} 
                 align="center"
             >
-                {content}
+                {settings.useDetailsView
+                    ? <DetailsView files={files} />
+                    : content
+                }
             </Grid>
         </React.Fragment>
     )

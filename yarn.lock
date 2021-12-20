@@ -2342,6 +2342,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/x-data-grid@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@mui/x-data-grid@npm:5.2.0"
+  dependencies:
+    "@mui/utils": ^5.2.2
+    clsx: ^1.1.1
+    prop-types: ^15.7.2
+    reselect: ^4.1.5
+  peerDependencies:
+    "@mui/material": ^5.2.2
+    "@mui/system": ^5.2.2
+    react: ^17.0.2
+  checksum: a2215ea6fb04e63473b06928764c42b79710ecb1a49a91f66e0ddd7869bd16f3ff95b87d11f68aeca27db48ce1fce82a2f0b544b024bb76d17ec2b941665e1ae
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -9744,6 +9760,7 @@ __metadata:
     "@mui/icons-material": ^5.1.1
     "@mui/material": ^5.1.1
     "@mui/styles": ^5.2.1
+    "@mui/x-data-grid": ^5.2.0
     "@rehooks/local-storage": 2.4.0
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
@@ -13187,6 +13204,13 @@ __metadata:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: eee0e303adffb69be55d1a214e415cf42b7441ae858c76dfc5353148644f6fd6e698926fc4643f510d5c126d12a705e7c8ed7e38061113bdf37547ab356797ff
+  languageName: node
+  linkType: hard
+
+"reselect@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "reselect@npm:4.1.5"
+  checksum: 54c13c1e795b2ea70cba8384138aebe78adda00cbea303cc94b64da0a70d74c896cc9a03115ae38b8bff990e7a60dcd6452ab68cbec01b0b38c1afda70714cf0
   languageName: node
   linkType: hard
 
