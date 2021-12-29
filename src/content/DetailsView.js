@@ -2,6 +2,7 @@
 import React from 'react'
 
 // Material UI
+import Grid from '@mui/material/Grid'
 import { Box, IconButton, TablePagination, Typography, useTheme } from '@mui/material';
 
 // Materail UI data grid
@@ -29,16 +30,16 @@ function DetailsFooter(props) {
     const apiRef = useGridApiContext();
     const [state] = useGridState(apiRef);
 
-    const [ rowsPerPage, setRowsPerPage ] = React.useState(10)
+    const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
     // stolen from MUI so skipping
     const handleChangeRowsPerPage = /* istanbul ignore next */ (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         apiRef.current.setPage(0)
-      }
+    }
 
     // delete
-    const [ deleteOpen, setDeleteOpen ] = React.useState(false)
+    const [deleteOpen, setDeleteOpen] = React.useState(false)
 
     async function del() {
         for (let file of files) {
@@ -66,7 +67,7 @@ function DetailsFooter(props) {
                 >
                     <DeleteIcon />
                 </IconButton>
-                <Box sx={{flex: 1}} />
+                <Box sx={{ flex: 1 }} />
                 <TablePagination
                     component="div"
                     count={state.pagination.rowCount}
@@ -91,7 +92,7 @@ function DetailsView(props) {
     const theme = useTheme()
 
     // selection stuff
-    const [ selected, setSelected ] = React.useState([])
+    const [selected, setSelected] = React.useState([])
 
     function handleSelectionChange(selection) {
         setSelected(selection.map(index => files[index]))
@@ -101,7 +102,7 @@ function DetailsView(props) {
     const locationContext = React.useContext(LocationContext)
 
     const files = props.files.map((file, index) => {
-        return {...file, id: index}
+        return { ...file, id: index }
     })
 
     // column data
@@ -151,9 +152,9 @@ function DetailsView(props) {
             flex: 1
         },
         {
-             field: "Mime",
-             headerName: "MIME Type",
-             flex: 1
+            field: "Mime",
+            headerName: "MIME Type",
+            flex: 1
         },
         {
             field: "Replication",
@@ -229,22 +230,34 @@ function DetailsView(props) {
     }
 
     return (
-        <DataGrid
-            disableSelectionOnClick
-            autoPageSize
-            checkboxSelection
-            columns={columns}
-            rows={files}
-            onCellDoubleClick={onCellDoubleClick}
-            onSelectionModelChange={handleSelectionChange}
-            components={{
-                Footer: DetailsFooter,
+        <Grid
+            container
+            spacing={2}
+            sx={{
+                marginLeft: "240px",
+                width: "calc(100vw - 240px)",
+                paddingTop: "15px",
+                height: "calc(100vh - 64px)"
             }}
-            componentsProps={{
-                footer: { files: selected}
-            }}
-            {...props}
-        />
+            align="center"
+        >
+            <DataGrid
+                disableSelectionOnClick
+                autoPageSize
+                checkboxSelection
+                columns={columns}
+                rows={files}
+                onCellDoubleClick={onCellDoubleClick}
+                onSelectionModelChange={handleSelectionChange}
+                components={{
+                    Footer: DetailsFooter,
+                }}
+                componentsProps={{
+                    footer: { files: selected }
+                }}
+                {...props}
+            />
+        </Grid>
     )
 
 }

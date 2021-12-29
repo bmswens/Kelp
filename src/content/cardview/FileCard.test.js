@@ -6,9 +6,9 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // to test
-import File from './File'
-import LocationContextWrapper from '../context/LocationContextWrapper'
-import SelectionContextWrapper from '../context/SelectionContextWrapper'
+import FileCard from './FileCard'
+import LocationContextWrapper from '../../context/LocationContextWrapper'
+import SelectionContextWrapper from '../../context/SelectionContextWrapper'
 
 const file = {
     "FullPath": "/example.log",
@@ -42,7 +42,7 @@ describe('<File>', function() {
     beforeEach(function() {
         render(
             <SelectionContextWrapper>
-                <File
+                <FileCard
                     data={file}
                 />
             </SelectionContextWrapper>
@@ -82,7 +82,7 @@ describe("The <File>'s <RightClickMenu>", function() {
     beforeEach(function() {
         render(
             <LocationContextWrapper>
-                <File
+                <FileCard
                     data={file}
                 />
             </LocationContextWrapper>

@@ -109,6 +109,12 @@ describe('<DetailsView> with files', function() {
         let confirmButton = screen.getByRole('button', { name: "confirm" })
         userEvent.click(confirmButton)
     })
+    it('should do nothing if a non-name column is double clicked', function() {
+        window.open = jest.fn()
+        let fileType = screen.getByText("text/x-log")
+        userEvent.dblClick(fileType)
+        expect(window.open).not.toHaveBeenCalled()
+    })
 })
 
 describe('<DetailsView> with dotfiles hidden', function() {

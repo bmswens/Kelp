@@ -5,12 +5,14 @@ import React from 'react'
 import { useTheme } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Box from '@mui/material/Box'
 
 // Material UI Icons
 import { Folder as FolderIcon } from '@mui/icons-material'
@@ -26,10 +28,10 @@ import useDoubleClick from 'use-double-click'
 import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
-import { LocationContext } from '../context/LocationContextWrapper'
-import Filer from '../seaweed/filer'
-import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
-import { SelectionContext } from '../context/SelectionContextWrapper'
+import { LocationContext } from '../../context/LocationContextWrapper'
+import Filer from '../../seaweed/filer'
+import DeleteItemConfirmation from '../../dialogs/DeleteItemConfirmation'
+import { SelectionContext } from '../../context/SelectionContextWrapper'
 
 
 
@@ -108,7 +110,7 @@ function RightClickMenu(props) {
 }
 
 
-function Folder(props) {
+function FolderCard(props) {
 
     const theme = useTheme()
     
@@ -174,28 +176,58 @@ function Folder(props) {
     return(
         <Grid 
             item 
-            xs={2}
+            xs={3}
 
         >
-            <IconButton
+            <Card
                 ref={selfRef}
                 sx={{
-                    background: isSelected ? theme.palette.info.main : theme.palette.background.default
-                }}
-                onContextMenu={rightClick}
-                aria-label={`${isSelected ? "selected " : '' }${props.data.name}`}
-            >
-                <FolderIcon fontSize="large"/>
-            </IconButton>
-            <Typography
-                sx={{
+                    display: "flex",
+                    background: isSelected ? theme.palette.info.dark : theme.palette.grey["900"],
                     '&:hover': {
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        background: theme.palette.action.selected
                     }
                 }}
+                onContextMenu={rightClick}
+                aria-label={`${isSelected ? "selected " : ''}${props.data.name}`}
+                role="button"
             >
-                {props.data.name}
-            </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}
+                >
+                    <CardContent
+                        sx={{
+                            flex: "1"
+                        }}
+                    >
+                        <FolderIcon
+                            sx={{
+                                fontSize: "56px"
+                            }}
+                        />
+                    </CardContent>
+                    <CardContent
+                        sx={{
+                            flex: "auto",
+                            userSelect: "none"
+                        }}
+                    >
+                        <Typography
+                            variant="h6"
+                        >
+                            {props.data.name}
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                        >
+                            {props.data.Mtime}
+                        </Typography>
+                    </CardContent>
+                </Box>
+            </Card>
             <RightClickMenu
                 open={menuOpen}
                 close={close}
@@ -209,4 +241,4 @@ function Folder(props) {
     )
 }
 
-export default Folder
+export default FolderCard

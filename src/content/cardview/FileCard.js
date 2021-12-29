@@ -5,12 +5,14 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { IconButton } from '@mui/material'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Box from '@mui/material/Box'
 
 // Material UI Icons
 import DescriptionIcon from '@mui/icons-material/Description'
@@ -26,10 +28,10 @@ import useDoubleClick from 'use-double-click'
 import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
-import Filer, { connectionString } from '../seaweed/filer'
-import { LocationContext } from '../context/LocationContextWrapper'
-import DeleteItemConfirmation from '../dialogs/DeleteItemConfirmation'
-import { SelectionContext } from '../context/SelectionContextWrapper'
+import Filer, { connectionString } from '../../seaweed/filer'
+import { LocationContext } from '../../context/LocationContextWrapper'
+import DeleteItemConfirmation from '../../dialogs/DeleteItemConfirmation'
+import { SelectionContext } from '../../context/SelectionContextWrapper'
 
 
 function RightClickMenu(props) {
@@ -107,7 +109,7 @@ function RightClickMenu(props) {
 }
 
 
-function File(props) {
+function FileCard(props) {
 
     const theme = useTheme()
     const context = React.useContext(LocationContext)
@@ -170,27 +172,57 @@ function File(props) {
     return (
         <Grid
             item
-            xs={2}
+            xs={3}
         >
-            <IconButton
+            <Card
                 ref={selfRef}
                 sx={{
-                    background: isSelected ? theme.palette.info.main : theme.palette.background.default
+                    display: "flex",
+                    background: isSelected ? theme.palette.info.dark : theme.palette.grey["900"],
+                    '&:hover': {
+                        cursor: "pointer",
+                        background: theme.palette.action.selected
+                    }
                 }}
                 onContextMenu={rightClick}
                 aria-label={`${isSelected ? "selected " : ''}${props.data.name}`}
+                role="button"
             >
-                <DescriptionIcon fontSize="large" />
-            </IconButton>
-            <Typography
-                sx={{
-                    '&:hover': {
-                        cursor: "pointer"
-                    }
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row'
                 }}
-            >
-                {props.data.name}
-            </Typography>
+                >
+                    <CardContent
+                        sx={{
+                            flex: "1"
+                        }}
+                    >
+                        <DescriptionIcon
+                            sx={{
+                                fontSize: "56px"
+                            }}
+                        />
+                    </CardContent>
+                    <CardContent
+                        sx={{
+                            flex: "auto",
+                            userSelect: "none"
+                        }}
+                    >
+                        <Typography
+                            variant="h6"
+                        >
+                            {props.data.name}
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                        >
+                            {props.data.Mtime}
+                        </Typography>
+                    </CardContent>
+                </Box>
+            </Card>
             <RightClickMenu
                 open={menuOpen}
                 close={close}
@@ -205,4 +237,4 @@ function File(props) {
 
 }
 
-export default File
+export default FileCard

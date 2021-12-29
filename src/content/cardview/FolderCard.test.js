@@ -9,9 +9,9 @@ import userEvent from '@testing-library/user-event'
 import { useLocalStorage } from '@rehooks/local-storage'
 
 // to test
-import Folder from './Folder'
-import { LocationContext } from '../context/LocationContextWrapper'
-import SelectionContextWrapper from '../context/SelectionContextWrapper'
+import FolderCard from './FolderCard'
+import { LocationContext } from '../../context/LocationContextWrapper'
+import SelectionContextWrapper from '../../context/SelectionContextWrapper'
 
 const folder = {
     "FullPath":"/topics",
@@ -49,7 +49,7 @@ describe('<Folder>', function() {
         render(
             <LocationContext.Provider value={locationState}>
                 <SelectionContextWrapper>
-                    <Folder
+                    <FolderCard
                         data={folder}
                     />
                 </SelectionContextWrapper>
@@ -97,7 +97,7 @@ describe('parent ".." <Folder>', function() {
         render(
             <LocationContext.Provider value={locationState}>
                 <SelectionContextWrapper>
-                    <Folder
+                    <FolderCard
                         data={{
                             ...folder,
                             name: ".."
@@ -129,7 +129,7 @@ describe("The <Folder>'s <RightClickMenu>", function() {
         }
         render(
             <LocationContext.Provider value={locationState}>
-                <Folder
+                <FolderCard
                     data={folder}
                 />
             </LocationContext.Provider>
