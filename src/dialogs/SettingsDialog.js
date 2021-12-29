@@ -15,7 +15,8 @@ import { useLocalStorage } from '@rehooks/local-storage'
 
 const defaultSettings = {
     showDotFiles: true,
-    useDetailsView: false
+    useDetailsView: false,
+    useDarkMode: true,
 }
 
 
@@ -56,6 +57,31 @@ function SettingsDialog(props) {
             </DialogTitle>
             <DialogContent dividers>
                 <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                        <FormLabel>
+                            <Typography variant="h5">
+                                Dark Mode
+                            </Typography>
+                        </FormLabel>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={6}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
+                        <Switch
+                            inputProps={{
+                                "aria-label": "use dark mode"
+                            }}
+                            checked={settings.useDarkMode}
+                            onChange={(event) => {
+                                updateSettings("useDarkMode", event.target.checked)
+                            }}
+                        />
+                    </Grid>
                     <Grid item xs={6}>
                         <FormLabel>
                             <Typography variant="h5">

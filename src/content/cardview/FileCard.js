@@ -178,7 +178,7 @@ function FileCard(props) {
                 ref={selfRef}
                 sx={{
                     display: "flex",
-                    background: isSelected ? theme.palette.info.dark : theme.palette.grey["900"],
+                    background: isSelected ? theme.palette.info.dark : theme.palette.background.card,
                     '&:hover': {
                         cursor: "pointer",
                         background: theme.palette.action.selected

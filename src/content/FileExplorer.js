@@ -19,7 +19,7 @@ import CardView from './cardview/CardView'
 function FileExplorer(props) {
 
     const context = React.useContext(LocationContext)
-    const [ files, setFiles ] = React.useState([])
+    const [ files, setFiles ] = React.useState(props.files || [])
 
     // settings
     const [settings] = useLocalStorage("settings", defaultSettings)
@@ -37,7 +37,7 @@ function FileExplorer(props) {
             setFiles(output)
         }
         loadFiles()
-    }, [context, settings])
+    }, [context.currentLocation, settings.showDotFiles])
 
 
     return (

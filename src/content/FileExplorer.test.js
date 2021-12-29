@@ -49,6 +49,10 @@ describe('The <FileExplorer>', function () {
         expect(file).not.toBeNull()
     })
     it('should display a grid view without failing', function() {
+        /* 
+            "rerender" not caught in act() error, all it does is render though
+        */
+        jest.spyOn(console, 'error').mockImplementation(() => {})
         localStorage.setItem("settings", JSON.stringify({ useDetailsView: true }))
         render(
             <LocationContext.Provider value={locationState}>

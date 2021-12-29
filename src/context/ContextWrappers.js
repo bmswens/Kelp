@@ -4,13 +4,17 @@ import React from 'react'
 // custom
 import LocationContextWrapper from './LocationContextWrapper'
 import SelectionContextWrapper from './SelectionContextWrapper'
+import ThemeWrapper from './ThemeWrapper'
 
 
 function ContextWrappers(props) {
     return(
         <LocationContextWrapper>
             <SelectionContextWrapper>
-                {props.children}
+                <ThemeWrapper>
+                    {props.children}
+
+                </ThemeWrapper>
             </SelectionContextWrapper>
         </LocationContextWrapper>
     )

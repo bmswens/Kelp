@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event'
 
 // to test
 import SettingsDialog from './SettingsDialog'
+import ContextWrappers from '../context/ContextWrappers'
 
 function getSetting(name) {
     let resp = localStorage.getItem("settings")
@@ -19,10 +20,12 @@ describe('<SettingsDialog>', function() {
     beforeEach(() => {
         close = jest.fn()
         render(
-            <SettingsDialog
-                open={true}
-                close={close}
-            />
+            <ContextWrappers>
+                <SettingsDialog
+                    open={true}
+                    close={close}
+                />
+            </ContextWrappers>
         )
     })
     it('should display the title', function() {
@@ -45,5 +48,11 @@ describe('<SettingsDialog>', function() {
         userEvent.click(switchButton)
         let dotSetting = getSetting('useDetailsView')
         expect(dotSetting).toBeTruthy()
+    })
+    it('should be able to toggle dark mode', function() {
+        let switchButton = screen.getByRole('checkbox', { name: "use dark mode" })
+        userEvent.click(switchButton)
+        let darkSetting = getSetting('useDarkMode')
+        expect(darkSetting).not.toBeTruthy()
     })
 })
