@@ -18,7 +18,10 @@ const defaultProfile = {
     },
     current: "localstorage",
     bookmarks: [],
-    options: []
+    options: [],
+    switchProfile: /* istanbul ignore next */ () => {},
+    updateSetting: /* istanbul ignore next */ () => {},
+    makeNewProfile: /* istanbul ignore next */ () => {}
 }
 
 const ProfileContext = React.createContext(defaultProfile)
@@ -39,7 +42,7 @@ function ProfileContextWrapper(props) {
 
     // for loading
     async function getProfiles() {
-        let output = []
+        let output = ["localstorage"]
         let profileFiles = await Filer.getFiles('/.kelp/profiles')
         for (let f of profileFiles) {
             let name = getName(f.FullPath)
@@ -58,7 +61,8 @@ function ProfileContextWrapper(props) {
             tempBookmarks = localBookmarks
         }
         else {
-            let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile}.json`)
+            let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile.profile}.json`)
+            console.log(`/.kelp/profiles/${selectedProfile}.json`, content)
             const data = JSON.parse(content)
             tempSettings = data.settings
             tempBookmarks = data.bookmarks
@@ -78,27 +82,32 @@ function ProfileContextWrapper(props) {
     }
 
     async function updateSetting(setting, value) {
+        let newSettings = {
+            ...settings,
+            [setting]: value
+        }
         if (usingLocalStorage) {
-            setLocalSettings({
-                ...localSettings,
-                [setting]: value
-            })
+            setLocalSettings(newSettings)
         }
         else {
-            let newSettings = {
-                ...settings,
-                [setting]: value
+            const content = {
+                settings: newSettings,
+                bookmarks: bookmarks
             }
-            let fileName = `/.kelp/profiles/${selectedProfile}.json`
-            let file = new File([JSON.stringify(newSettings)], fileName, {type: "application/json"})
+            let fileName = `/.kelp/profiles/${selectedProfile.profile}.json`
+            let file = new File([JSON.stringify(content)], fileName, {type: "application/json"})
             await Filer.uploadFile(fileName, file)
             setSettings(newSettings)
         }
     }
 
     async function makeNewProfile(name) {
+        const content = {
+            settings: settings,
+            bookmarks: bookmarks
+        }
         let fileName = `/.kelp/profiles/${name}.json`
-        let file = new File([JSON.stringify(settings)], fileName, {type: "application/json"})
+        let file = new File([JSON.stringify(content)], fileName, {type: "application/json"})
         await Filer.uploadFile(fileName, file)
         setSelectedProfile({ profile: name })
     } 

@@ -6,12 +6,16 @@ import { FormLabel, Grid, IconButton, Switch, Typography } from '@mui/material'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
 
 // Material UI Icons
 import CloseIcon from '@mui/icons-material/Close'
+import LoginIcon from '@mui/icons-material/Login'
 
-// local storage
-import { useLocalStorage } from '@rehooks/local-storage'
+// custom
+import { ProfileContext } from '../context/ProfileContextWrapper'
 
 const defaultSettings = {
     showDotFiles: true,
@@ -20,18 +24,59 @@ const defaultSettings = {
 }
 
 
+function ProfileSelector(props) {
+
+    const profile = React.useContext(ProfileContext)
+    const [input, setInput] = React.useState(profile.current)
+
+    function handleSwitch() {
+        if (profile.options.includes(input)) {
+            profile.switchProfile(input)
+        }
+        else {
+            profile.makeNewProfile(input)
+        }
+    }
+
+
+    return (
+        <React.Fragment>
+            <Grid item xs={9}>
+                <Autocomplete
+                    fullWidth
+                    freeSolo
+                    inputValue={input}
+                    onInputChange={(event, newValue) => setInput(newValue)}
+                    options={profile.options}
+                    renderInput={(params) => <TextField {...params} label="Profile" />}
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Box
+                    sx={{ display: "flex", flexDirection: "row-reverse" }}
+                >
+                    <IconButton
+                        aria-label="switch profiles"
+                        onClick={handleSwitch}
+                    >
+                        <LoginIcon fontSize="large" />
+                    </IconButton>
+                </Box>
+            </Grid>
+        </React.Fragment>
+
+    )
+}
+
+
 function SettingsDialog(props) {
 
     const { open, close } = props
 
-    // settings storage
-    const [settings, setSettings] = useLocalStorage('settings', defaultSettings)
+    const profile = React.useContext(ProfileContext)
 
     function updateSettings(setting, value) {
-        setSettings({
-            ...settings,
-            [setting]: value
-        })
+        profile.updateSetting(setting, value)
     }
 
     return (
@@ -57,6 +102,7 @@ function SettingsDialog(props) {
             </DialogTitle>
             <DialogContent dividers>
                 <Grid container spacing={1}>
+                    <ProfileSelector />
                     <Grid item xs={6}>
                         <FormLabel>
                             <Typography variant="h5">
@@ -76,7 +122,7 @@ function SettingsDialog(props) {
                             inputProps={{
                                 "aria-label": "use dark mode"
                             }}
-                            checked={settings.useDarkMode}
+                            checked={profile.settings.useDarkMode}
                             onChange={(event) => {
                                 updateSettings("useDarkMode", event.target.checked)
                             }}
@@ -101,7 +147,7 @@ function SettingsDialog(props) {
                             inputProps={{
                                 "aria-label": "show dotfiles"
                             }}
-                            checked={settings.showDotFiles}
+                            checked={profile.settings.showDotFiles}
                             onChange={(event) => {
                                 updateSettings("showDotFiles", event.target.checked)
                             }}
@@ -126,7 +172,7 @@ function SettingsDialog(props) {
                             inputProps={{
                                 "aria-label": "use details view"
                             }}
-                            checked={settings.useDetailsView}
+                            checked={profile.settings.useDetailsView}
                             onChange={(event) => {
                                 updateSettings("useDetailsView", event.target.checked)
                             }}

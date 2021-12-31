@@ -154,7 +154,7 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
         userEvent.click(makeNewButton)
         await waitFor(() => {
             profiles = screen.getByTestId('profile-list')
-            expect(profiles.innerHTML).toEqual('default, john, test')
+            expect(profiles.innerHTML).toEqual('localstorage, default, john, test')
         })
     })
     // localstorage

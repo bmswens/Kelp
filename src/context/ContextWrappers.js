@@ -5,17 +5,20 @@ import React from 'react'
 import LocationContextWrapper from './LocationContextWrapper'
 import SelectionContextWrapper from './SelectionContextWrapper'
 import ThemeWrapper from './ThemeWrapper'
+import ProfileContextWrapper from './ProfileContextWrapper'
 
 
 function ContextWrappers(props) {
     return(
         <LocationContextWrapper>
-            <SelectionContextWrapper>
-                <ThemeWrapper>
-                    {props.children}
+            <ProfileContextWrapper>
+                <SelectionContextWrapper>
+                    <ThemeWrapper>
+                        {props.children}
 
-                </ThemeWrapper>
-            </SelectionContextWrapper>
+                    </ThemeWrapper>
+                </SelectionContextWrapper>
+            </ProfileContextWrapper>
         </LocationContextWrapper>
     )
 }
