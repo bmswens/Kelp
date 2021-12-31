@@ -55,21 +55,26 @@ describe('<ProfileContextWrapper> using localStorage', function() {
         localStorage.clear()
     })
 
-    it('should default to localstorage', function() {
+    it('should default to localstorage', async function() {
         let profileName = screen.getByTestId('profile-name')
         expect(profileName.innerHTML).toEqual('localstorage')
     })
-    it('should be able to update settings using localstorage', function() {
+    it('should be able to update settings using localstorage',async  function() {
         let toggleButton = screen.getByRole('button', { name: "toggle dark mode" })
         userEvent.click(toggleButton)
-        let darkMode = screen.getByTestId('dark-mode')
-        expect(darkMode.innerHTML).toEqual('false')
+        await waitFor(() => {
+            let darkMode = screen.getByTestId('dark-mode')
+            expect(darkMode.innerHTML).toEqual('false')
+        })
     })
 })
 
-describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
+describe.only('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
 
     const mockProfiles = [
+        {
+            "FullPath": "/.kelp/profiles/random.txt"
+        },
         {
             "FullPath": "/.kelp/profiles/default.json",
             "Mtime": "2021-11-22T01:28:44Z",
@@ -147,7 +152,7 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
         jest.restoreAllMocks()
     })
 
-    it('should default to using "default.json"', function() {
+    it('should default to using "default.json"', async function() {
         let profileName = screen.getByTestId('profile-name')
         expect(profileName.innerHTML).toEqual('default')
     })

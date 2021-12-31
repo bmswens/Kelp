@@ -91,7 +91,7 @@ function ProfileContextWrapper(props) {
             }
             let fileName = `/.kelp/profiles/${selectedProfile}.json`
             let file = new File([JSON.stringify(newSettings)], fileName, {type: "application/json"})
-            // await Filer.uploadFile(fileName, file)
+            await Filer.uploadFile(fileName, file)
             setSettings(newSettings)
         }
     }
