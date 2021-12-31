@@ -1,6 +1,9 @@
 // React
 import React from 'react'
 
+// storage
+import { writeStorage } from '@rehooks/local-storage'
+
 // testing library
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -41,35 +44,7 @@ function ProfileTester(props) {
     )
 }
 
-describe('<ProfileContextWrapper> using localStorage', function() {
-
-    beforeEach(() => {
-        render(
-            <ProfileContextWrapper>
-                <ProfileTester />
-            </ProfileContextWrapper>
-        )
-    })
-
-    afterEach(() => {
-        localStorage.clear()
-    })
-
-    it('should default to localstorage', async function() {
-        let profileName = screen.getByTestId('profile-name')
-        expect(profileName.innerHTML).toEqual('localstorage')
-    })
-    it('should be able to update settings using localstorage',async  function() {
-        let toggleButton = screen.getByRole('button', { name: "toggle dark mode" })
-        userEvent.click(toggleButton)
-        await waitFor(() => {
-            let darkMode = screen.getByTestId('dark-mode')
-            expect(darkMode.innerHTML).toEqual('false')
-        })
-    })
-})
-
-describe.only('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
+describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
 
     const mockProfiles = [
         {
@@ -182,4 +157,24 @@ describe.only('<ProfileContextWrapper> with SeaweedFS profiles enabled', functio
             expect(profiles.innerHTML).toEqual('default, john, test')
         })
     })
+    // localstorage
+    it('should default to localstorage', async function() {
+        await waitFor(() => {
+            writeStorage("profile", { profile: "localstorage" })
+            let profileName = screen.getByTestId('profile-name')
+            expect(profileName.innerHTML).toEqual('localstorage')
+        })
+    })
+    it('should be able to update settings using localstorage',async  function() {
+        await waitFor(() => {
+            writeStorage("profile", { profile: "localstorage" })
+        })
+        let toggleButton = screen.getByRole('button', { name: "toggle dark mode" })
+        userEvent.click(toggleButton)
+        await waitFor(() => {
+            let darkMode = screen.getByTestId('dark-mode')
+            expect(darkMode.innerHTML).toEqual('false')
+        })
+    })
+
 })
