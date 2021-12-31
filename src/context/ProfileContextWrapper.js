@@ -25,9 +25,17 @@ const ProfileContext = React.createContext(defaultProfile)
 
 function ProfileContextWrapper(props) {
 
-    const [profile, setProfile] = React.useState(defaultProfile)
+    // for the final profile
+    const [settings, setSettings] = React.useState(defaultProfile.settings)
+    const [bookmarks, setBookmarks] = React.useState(defaultProfile.bookmarks)
     const [options, setOptions] = React.useState([])
     const [selectedProfile, setSelectedProfile] = useLocalStorage("profile", { profile: "localstorage"})
+
+    // localstorage
+    const [localSettings, setLocalSettings] = useLocalStorage("settings", defaultProfile.settings)
+    const [localBookmarks, setLocalBookmarks] = useLocalStorage("bookmarks", defaultProfile.bookmarks)
+
+    const usingLocalStorage = selectedProfile.profile === "localstorage"
 
     // for loading
     async function getProfiles() {
@@ -43,39 +51,63 @@ function ProfileContextWrapper(props) {
     }
 
     async function loadProfile() {
-        if (!(selectedProfile === "localstorage")) {
-            let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile}.json`)
-            const { settings, bookmarks } = JSON.parse(content)
-            setProfile({
-                ...profile,
-                settings,
-                bookmarks
-            })
+        let tempSettings
+        let tempBookmarks
+        if (usingLocalStorage) {
+            tempSettings = localSettings
+            tempBookmarks = localBookmarks
         }
+        else {
+            let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile}.json`)
+            const data = JSON.parse(content)
+            tempSettings = data.settings
+            tempBookmarks = data.bookmarks
+        }
+        setSettings(tempSettings)
+        setBookmarks(tempBookmarks)
     }
 
     React.useEffect(() => {
         getProfiles()
         loadProfile()
-    }, [selectedProfile.profile])
+    }, [selectedProfile.profile, localSettings, localBookmarks])
 
     // for updating
     async function switchProfile(name) {
-        setSelectedProfile({ profile: name})
+        setSelectedProfile({ profile: name })
     }
 
     async function updateSetting(setting, value) {
-        
+        if (usingLocalStorage) {
+            setLocalSettings({
+                ...localSettings,
+                [setting]: value
+            })
+        }
+        else {
+            let newSettings = {
+                ...settings,
+                [setting]: value
+            }
+            let fileName = `/.kelp/profiles/${selectedProfile}.json`
+            let file = new File([JSON.stringify(newSettings)], fileName, {type: "application/json"})
+            // await Filer.uploadFile(fileName, file)
+            setSettings(newSettings)
+        }
     }
 
     async function makeNewProfile(name) {
-
+        let fileName = `/.kelp/profiles/${name}.json`
+        let file = new File([JSON.stringify(settings)], fileName, {type: "application/json"})
+        await Filer.uploadFile(fileName, file)
+        setSelectedProfile({ profile: name })
     } 
 
     return (
         <ProfileContext.Provider
             value={{
-                ...profile,
+                settings,
+                bookmarks,
                 options,
                 current: selectedProfile.profile,
                 switchProfile,

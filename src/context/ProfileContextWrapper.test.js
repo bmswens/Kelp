@@ -41,7 +41,7 @@ function ProfileTester(props) {
     )
 }
 
-describe('<ProfileContextWrapper> default', function() {
+describe('<ProfileContextWrapper> using localStorage', function() {
 
     beforeEach(() => {
         render(
@@ -51,9 +51,19 @@ describe('<ProfileContextWrapper> default', function() {
         )
     })
 
+    afterEach(() => {
+        localStorage.clear()
+    })
+
     it('should default to localstorage', function() {
         let profileName = screen.getByTestId('profile-name')
         expect(profileName.innerHTML).toEqual('localstorage')
+    })
+    it('should be able to update settings using localstorage', function() {
+        let toggleButton = screen.getByRole('button', { name: "toggle dark mode" })
+        userEvent.click(toggleButton)
+        let darkMode = screen.getByTestId('dark-mode')
+        expect(darkMode.innerHTML).toEqual('false')
     })
 })
 
@@ -118,6 +128,7 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
     beforeEach(async () => {
         Filer.getFiles = jest.fn(async () => mockProfiles)
         Filer.getContent = jest.fn(async () => JSON.stringify(mockProfile))
+        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [...mockProfiles, {FullPath: "/.kelp/profiles/test.json"}]))
         localStorage.setItem("profile", JSON.stringify({ profile: "default" }))
         render(
             <ProfileContextWrapper>
@@ -133,6 +144,7 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
 
     afterEach(() => {
         localStorage.clear()
+        jest.restoreAllMocks()
     })
 
     it('should default to using "default.json"', function() {
@@ -147,18 +159,22 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
             expect(profileName.innerHTML).toEqual('john')
         })
     })
-    it('should allow you to update the current profile', function() {
+    it('should allow you to update the current profile', async function() {
         let toggleButton = screen.getByRole('button', { name: "toggle dark mode" })
         userEvent.click(toggleButton)
-        let darkMode = screen.getByTestId('dark-mode')
-        expect(darkMode.innerHTML).toEqual('false')
+        await waitFor(() => {
+            let darkMode = screen.getByTestId('dark-mode')
+            expect(darkMode.innerHTML).toEqual('false')
+        })
     })
-    it('should allow you to create a new profile, copying current settings', function() {
+    it('should allow you to create a new profile, copying current settings', async function() {
         let profiles = screen.getByTestId('profile-list')
         expect(profiles.innerHTML).toEqual('default, john')
         let makeNewButton = screen.getByRole('button', { name: "make new profile" })
         userEvent.click(makeNewButton)
-        profiles = screen.getByTestId('profile-list')
-        expect(profiles.innerHTML).toEqual('default, john, test')
+        await waitFor(() => {
+            profiles = screen.getByTestId('profile-list')
+            expect(profiles.innerHTML).toEqual('default, john, test')
+        })
     })
 })
