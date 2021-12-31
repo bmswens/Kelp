@@ -149,7 +149,7 @@ describe('<ProfileContextWrapper> with SeaweedFS profiles enabled', function() {
     })
     it('should allow you to create a new profile, copying current settings', async function() {
         let profiles = screen.getByTestId('profile-list')
-        expect(profiles.innerHTML).toEqual('default, john')
+        expect(profiles.innerHTML).toEqual('localstorage, default, john')
         let makeNewButton = screen.getByRole('button', { name: "make new profile" })
         userEvent.click(makeNewButton)
         await waitFor(() => {
