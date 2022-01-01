@@ -24,14 +24,13 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 // use-double-click
 import useDoubleClick from 'use-double-click'
 
-// rehooks local storage
-import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import Filer, { connectionString } from '../../seaweed/filer'
 import { LocationContext } from '../../context/LocationContextWrapper'
 import DeleteItemConfirmation from '../../dialogs/DeleteItemConfirmation'
 import { SelectionContext } from '../../context/SelectionContextWrapper'
+import { ProfileContext } from '../../context/ProfileContextWrapper'
 
 
 function RightClickMenu(props) {
@@ -155,17 +154,15 @@ function FileCard(props) {
     }
 
     // favorite
-    const [favorites, setFavorites] = useLocalStorage('favorites', [])
+    const profile = React.useContext(ProfileContext)
 
     function favorite() {
-        setFavorites([
-            ...favorites,
-            {
-                fullPath: props.data.FullPath,
-                shortName: props.data.name,
-                isFile: true
-            }
-        ])
+        let bookmark = {
+            fullPath: props.data.FullPath,
+            shortName: props.data.name,
+            isFile: true
+        }
+        profile.addBookmark(bookmark)
         close()
     }
 

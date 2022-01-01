@@ -31,7 +31,7 @@ function ContextTester(props) {
     )
 }
 
-describe('<SelectionContextWrapper>', function() {
+describe('<LocationContextWrapper>', function() {
     beforeEach(() => {
         render(
             <LocationContextWrapper>

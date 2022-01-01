@@ -5,6 +5,9 @@ import React from 'react'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+// help
+import { ProfileContext, defaultProfile } from '../../context/ProfileContextWrapper'
+
 // to test
 import FileCard from './FileCard'
 import LocationContextWrapper from '../../context/LocationContextWrapper'
@@ -79,13 +82,20 @@ describe('<File>', function() {
 })
 
 describe("The <File>'s <RightClickMenu>", function() {
+    let profileContext
     beforeEach(function() {
+        profileContext = {
+            ...defaultProfile,
+            addBookmark: jest.fn()
+        }
         render(
-            <LocationContextWrapper>
-                <FileCard
-                    data={file}
-                />
-            </LocationContextWrapper>
+            <ProfileContext.Provider value={profileContext}>
+                <LocationContextWrapper>
+                    <FileCard
+                        data={file}
+                    />
+                </LocationContextWrapper>
+            </ProfileContext.Provider>
         )
         let fileButton = screen.getByRole('button', { name: file.name })
         fireEvent.contextMenu(fileButton)
@@ -113,13 +123,7 @@ describe("The <File>'s <RightClickMenu>", function() {
     it('should allow the user to favorite a folder', function() {
         let button = screen.getByRole('menuitem', { name: "favorite file" })
         userEvent.click(button)
-        let favoritesString = window.localStorage.getItem('favorites')
-        let favorites = JSON.parse(favoritesString)
-        expect(favorites).toEqual([{
-            fullPath: "/example.log",
-            shortName: "example.log",
-            isFile: true
-        }])
+        expect(profileContext.addBookmark).toHaveBeenCalled()
     })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement

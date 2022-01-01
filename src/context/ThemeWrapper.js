@@ -5,18 +5,17 @@ import React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 // local storage
-import useLocalStorage from '@rehooks/local-storage'
-import { defaultSettings } from '../dialogs/SettingsDialog'
+import {ProfileContext} from './ProfileContextWrapper'
 
 
 function ThemeWrapper(props) {
     
-    // settings
-    const [settings] = useLocalStorage("settings", defaultSettings)
+    // settings 
+    const profile = React.useContext(ProfileContext)
 
-    const mode = settings.useDarkMode ? "dark" : "light"
+    const mode = profile.settings.useDarkMode ? "dark" : "light"
 
-    const cardBackground = settings.useDarkMode ? "#212121" : "#bdbdbd"
+    const cardBackground = profile.settings.useDarkMode ? "#212121" : "#bdbdbd"
     
     const theme = createTheme({
         palette: {

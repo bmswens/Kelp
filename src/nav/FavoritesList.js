@@ -17,12 +17,10 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import DescriptionIcon from '@mui/icons-material/Description'
 import { Folder as FolderIcon } from '@mui/icons-material'
 
-// rehooks local storage
-import { useLocalStorage } from '@rehooks/local-storage'
-
 // custom
 import { LocationContext } from '../context/LocationContextWrapper'
 import { connectionString } from '../seaweed/filer'
+import { ProfileContext } from '../context/ProfileContextWrapper'
 
 
 function RightClickMenu(props) {
@@ -30,12 +28,10 @@ function RightClickMenu(props) {
     const { open, close, index } = props
     const { anchorElement } = props
 
-    const [favorites, setFavorites] = useLocalStorage('favorites', [])
+    const profile = React.useContext(ProfileContext)
 
     function remove() {
-        let tempFaves = [...favorites]
-        tempFaves.splice(index, 1)
-        setFavorites(tempFaves)
+        profile.removeBookmark(index)
         close()
     }
 
@@ -120,7 +116,7 @@ function FavoritesList(props) {
 
     const [open, setOpen] = React.useState(false)
 
-    const [favorites] = useLocalStorage("favorites", [])
+    const profile = React.useContext(ProfileContext)
 
     return (
         <List>
@@ -144,7 +140,7 @@ function FavoritesList(props) {
                 <List
                     disablePadding
                 >
-                    {favorites.map((favorite, index) => <FavoriteItem data={favorite} index={index} key={index} />)}
+                    {profile.bookmarks.map((favorite, index) => <FavoriteItem data={favorite} index={index} key={index} />)}
                 </List>
             </Collapse>
         </List>

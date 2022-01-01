@@ -4,6 +4,9 @@ import React from 'react'
 // testing library
 import { render, screen, waitFor } from '@testing-library/react'
 
+// help
+import { ProfileContext, defaultProfile } from '../context/ProfileContextWrapper'
+
 // to test
 import FileExplorer from './FileExplorer'
 import { LocationContext } from '../context/LocationContextWrapper'
@@ -37,27 +40,31 @@ describe('The <FileExplorer>', function () {
         
     })
     it('should hide dotfiles if setting selected', async function() {
-        localStorage.setItem("settings", JSON.stringify({ showDotFiles: false }))
         render(
-            <LocationContext.Provider value={locationState}>
-                <FileExplorer />
-            </LocationContext.Provider>
+            <ProfileContext.Provider value={{...defaultProfile, settings: {...defaultProfile.settings, showDotFiles: false}}} >
+                <LocationContext.Provider value={locationState}>
+                    <FileExplorer />
+                </LocationContext.Provider>
+            </ProfileContext.Provider>
         )
-        let file = await screen.findByText('example.log')
-        let folder = screen.queryByText('.topics')
-        expect(folder).toBeNull()
-        expect(file).not.toBeNull()
+        await waitFor(async () => {
+            let file = await screen.findByText('example.log')
+            let folder = screen.queryByText('.topics')
+            expect(folder).toBeNull()
+            expect(file).not.toBeNull()
+        })
     })
     it('should display a grid view without failing', function() {
         /* 
             "rerender" not caught in act() error, all it does is render though
         */
         jest.spyOn(console, 'error').mockImplementation(() => {})
-        localStorage.setItem("settings", JSON.stringify({ useDetailsView: true }))
         render(
-            <LocationContext.Provider value={locationState}>
-                <FileExplorer />
-            </LocationContext.Provider>
+            <ProfileContext.Provider value={{...defaultProfile, settings: {...defaultProfile.settings, useDetailsView: true}}} >
+                <LocationContext.Provider value={locationState}>
+                    <FileExplorer />
+                </LocationContext.Provider>
+            </ProfileContext.Provider>
         )
         // <DetailsView> is tested elsewhere
     })

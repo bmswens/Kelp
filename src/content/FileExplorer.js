@@ -5,15 +5,12 @@ import React from 'react'
 import Toolbar from '@mui/material/Toolbar'
 import CssBaseline from '@mui/material/CssBaseline'
 
-// local storage
-import useLocalStorage from '@rehooks/local-storage'
-
 // custom
 import { LocationContext } from '../context/LocationContextWrapper'
 import Filer from '../seaweed/filer'
-import { defaultSettings } from '../dialogs/SettingsDialog'
 import DetailsView from './DetailsView'
 import CardView from './cardview/CardView'
+import { ProfileContext } from '../context/ProfileContextWrapper'
 
 
 function FileExplorer(props) {
@@ -21,15 +18,14 @@ function FileExplorer(props) {
     const context = React.useContext(LocationContext)
     const [ files, setFiles ] = React.useState(props.files || [])
 
-    // settings
-    const [settings] = useLocalStorage("settings", defaultSettings)
+    const profile = React.useContext(ProfileContext)
 
     React.useEffect(function() {
         async function loadFiles() {
             let tempFiles = await Filer.getFiles(context.currentLocation)
             let output = []
             for (let f of tempFiles) {
-                if (!settings.showDotFiles && f.name.startsWith('.')) {
+                if (!profile.settings.showDotFiles && f.name.startsWith('.')) {
                     continue
                 }
                 output.push(f)
@@ -37,14 +33,14 @@ function FileExplorer(props) {
             setFiles(output)
         }
         loadFiles()
-    }, [context.currentLocation, settings.showDotFiles])
+    }, [context.currentLocation, profile.settings.showDotFiles])
 
 
     return (
         <React.Fragment>
             <Toolbar />
             <CssBaseline />
-            {settings.useDetailsView
+            {profile.settings.useDetailsView
                 ? <DetailsView files={files} />
                 : <CardView files={files} />
             }
