@@ -24,8 +24,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 // use-double-click
 import useDoubleClick from 'use-double-click'
 
-// rehooks local storage
-import { useLocalStorage } from '@rehooks/local-storage'
 
 // custom
 import Filer, { connectionString } from '../../seaweed/filer'

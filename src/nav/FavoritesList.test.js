@@ -2,7 +2,7 @@
 import React from 'react'
 
 // testing library
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // help
@@ -122,10 +122,18 @@ describe('<FavoritesList>', function() {
 })
 
 describe('<FavoritesList> expanded, with items', function() {
+    let profileContext
     beforeEach(() => {
-        localStorage.setItem('favorites', JSON.stringify([favoriteFile]))
+        profileContext = {
+            ...defaultProfile,
+            addBookmark: jest.fn(() => profileContext.bookmarks = [favoriteFile, favoriteFolder]),
+            removeBookmark: jest.fn(),
+            bookmarks: [favoriteFile]
+        }
         render(
-            <FavoritesList />
+            <ProfileContext.Provider value={profileContext}>
+                <FavoritesList />
+            </ProfileContext.Provider>
         )
         let openButton = screen.getByRole('button', { name: 'Favorites'})
         userEvent.click(openButton)
@@ -140,7 +148,15 @@ describe('<FavoritesList> expanded, with items', function() {
     it('should update when a new favorite is added', async function() {
         let favoriteFolderButton = screen.queryByRole('button', { name: favoriteFolder.shortName})
         expect(favoriteFolderButton).toBeNull()
-        act(() => writeStorage('favorites', [favoriteFile, favoriteFolder]))
+        profileContext.bookmarks = [favoriteFile, favoriteFolder]
+        cleanup()
+        render(
+            <ProfileContext.Provider value={profileContext}>
+                <FavoritesList />
+            </ProfileContext.Provider>
+        )
+        let openButton = screen.getByRole('button', { name: 'Favorites'})
+        userEvent.click(openButton)
         await waitFor(() => {
             favoriteFolderButton = screen.getByRole('button', { name: favoriteFolder.shortName})
             expect(favoriteFolderButton).not.toBeNull()

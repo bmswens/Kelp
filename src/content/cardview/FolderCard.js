@@ -24,9 +24,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark'
 // use-double-click
 import useDoubleClick from 'use-double-click'
 
-// rehooks local storage
-import { useLocalStorage } from '@rehooks/local-storage'
-
 // custom
 import { LocationContext } from '../../context/LocationContextWrapper'
 import Filer from '../../seaweed/filer'

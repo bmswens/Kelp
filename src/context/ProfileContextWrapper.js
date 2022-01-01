@@ -55,27 +55,27 @@ function ProfileContextWrapper(props) {
         setOptions(output)
     }
 
-    async function loadProfile() {
-        let tempSettings
-        let tempBookmarks
-        if (usingLocalStorage) {
-            tempSettings = localSettings
-            tempBookmarks = localBookmarks
-        }
-        else {
-            let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile.profile}.json`)
-            const data = JSON.parse(content)
-            tempSettings = data.settings
-            tempBookmarks = data.bookmarks
-        }
-        setSettings(tempSettings)
-        setBookmarks(tempBookmarks)
-    }
-
+    
     React.useEffect(() => {
+        async function loadProfile() {
+            let tempSettings
+            let tempBookmarks
+            if (usingLocalStorage) {
+                tempSettings = localSettings
+                tempBookmarks = localBookmarks
+            }
+            else {
+                let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile.profile}.json`)
+                const data = JSON.parse(content)
+                tempSettings = data.settings
+                tempBookmarks = data.bookmarks
+            }
+            setSettings(tempSettings)
+            setBookmarks(tempBookmarks)
+        }
         getProfiles()
         loadProfile()
-    }, [selectedProfile.profile, localSettings, localBookmarks])
+    }, [selectedProfile.profile, localSettings, localBookmarks, usingLocalStorage])
 
     // for updating
     async function switchProfile(name) {
