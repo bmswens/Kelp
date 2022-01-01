@@ -27,7 +27,7 @@ describe('<SettingsDialog>', function() {
         profileContext = {
             ...defaultProfile,
             options: ["localstorage", "default"],
-            updateSetting: jest.fn(),
+            updateSetting: jest.fn((setting, value) => profileContext.settings[setting] = value),
             switchProfile: jest.fn(),
             makeNewProfile: jest.fn()
         }
