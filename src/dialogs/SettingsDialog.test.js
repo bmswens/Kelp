@@ -10,9 +10,9 @@ import SettingsDialog from './SettingsDialog'
 import ContextWrappers from '../context/ContextWrappers'
 
 // mock
-import Filer from '../seaweed/filer'
 import { defaultProfile } from '../context/ProfileContextWrapper'
-import { waitForDebugger } from 'inspector'
+import { ProfileContext } from '../context/ProfileContextWrapper'
+import { profile } from 'console'
 
 function getSetting(name) {
     let resp = localStorage.getItem("settings")
@@ -22,18 +22,23 @@ function getSetting(name) {
 
 describe('<SettingsDialog>', function() {
     let close
+    let profileContext
     beforeEach(() => {
-        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
-        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
-        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
+        profileContext = {
+            ...defaultProfile,
+            options: ["localstorage", "default"],
+            updateSetting: jest.fn(),
+            switchProfile: jest.fn(),
+            makeNewProfile: jest.fn()
+        }
         close = jest.fn()
         render(
-            <ContextWrappers>
+            <ProfileContext.Provider value={profileContext}>
                 <SettingsDialog
                     open={true}
                     close={close}
                 />
-            </ContextWrappers>
+            </ProfileContext.Provider>
         )
     })
     afterEach(() => {
@@ -51,29 +56,26 @@ describe('<SettingsDialog>', function() {
     it('should be able to hide dotfiles', function() {
         let switchButton = screen.getByRole('checkbox', { name: "show dotfiles" })
         userEvent.click(switchButton)
-        let dotSetting = getSetting('showDotfiles')
-        expect(dotSetting).not.toBeTruthy()
+        expect(profileContext.updateSetting).toHaveBeenCalledWith("showDotFiles", false)
     })
     it('should be able to use list display', function() {
         let switchButton = screen.getByRole('checkbox', { name: "use details view" })
         userEvent.click(switchButton)
-        let dotSetting = getSetting('useDetailsView')
-        expect(dotSetting).toBeTruthy()
+        expect(profileContext.updateSetting).toHaveBeenCalledWith("useDetailsView", true)
     })
     it('should be able to toggle dark mode', function() {
         let switchButton = screen.getByRole('checkbox', { name: "use dark mode" })
         userEvent.click(switchButton)
-        let darkSetting = getSetting('useDarkMode')
-        expect(darkSetting).not.toBeTruthy()
+        expect(profileContext.updateSetting).toHaveBeenCalledWith("useDarkMode", false)
     })
     it('should allow a user to select a profile from options', async function() {
         let textField = screen.getByRole('textbox', { name: "select profile" })
-        userEvent.type(textField, "default")
+        userEvent.clear(textField)
+        userEvent.type(textField, "localstorage")
         let swithButton = screen.getByRole('button', { name: "switch profiles" })
         userEvent.click(swithButton)
         await waitFor(() => {
-            let text = screen.getByRole('textbox', { name: "select profile" })
-            expect(text).not.toBeNull()
+            expect(profileContext.switchProfile).toHaveBeenCalled()
         })
     })
     it('should allow a user to create a new profile', async function() {
@@ -82,8 +84,7 @@ describe('<SettingsDialog>', function() {
         let swithButton = screen.getByRole('button', { name: "switch profiles" })
         userEvent.click(swithButton)
         await waitFor(() => {
-            let text = screen.getByRole('textbox', { name: "select profile" })
-            expect(text).not.toBeNull()
+            expect(profileContext.makeNewProfile).toHaveBeenCalled()
         })
     })
 })
