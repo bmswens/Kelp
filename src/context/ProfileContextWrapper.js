@@ -21,7 +21,9 @@ const defaultProfile = {
     options: [],
     switchProfile: /* istanbul ignore next */ () => {},
     updateSetting: /* istanbul ignore next */ () => {},
-    makeNewProfile: /* istanbul ignore next */ () => {}
+    makeNewProfile: /* istanbul ignore next */ () => {},
+    addBookmark: /* istanbul ignore next */ () => {},
+    removeBookmark: /* istanbul ignore next */ () => {}
 }
 
 const ProfileContext = React.createContext(defaultProfile)
@@ -109,7 +111,46 @@ function ProfileContextWrapper(props) {
         let file = new File([JSON.stringify(content)], fileName, {type: "application/json"})
         await Filer.uploadFile(fileName, file)
         setSelectedProfile({ profile: name })
-    } 
+    }
+
+    // bookmarks
+    async function addBookmark(bookmark) {
+        let newBookmarks = [
+            ...bookmarks,
+            bookmark
+        ]
+        if (usingLocalStorage) {
+            setLocalBookmarks(newBookmarks)
+        }
+        else {
+            let fileName = `/.kelp/profiles/${selectedProfile.profile}.json`
+            let content = {
+                settings,
+                bookmarks: newBookmarks
+            }
+            let file = new File([JSON.stringify(content)], fileName, {type: "application/json"})
+            await Filer.uploadFile(fileName, file)
+        }
+        setBookmarks(newBookmarks)
+    }
+
+    async function removeBookmark(index) {
+        let newBookmarks = [...bookmarks]
+        newBookmarks.splice(index, 1)
+        if (usingLocalStorage) {
+            setLocalBookmarks(newBookmarks)
+        }
+        else {
+            let fileName = `/.kelp/profiles/${selectedProfile.profile}.json`
+            let content = {
+                settings,
+                bookmarks: newBookmarks
+            }
+            let file = new File([JSON.stringify(content)], fileName, {type: "application/json"})
+            await Filer.uploadFile(fileName, file)
+        }
+        setBookmarks(newBookmarks)
+    }
 
     return (
         <ProfileContext.Provider
@@ -120,7 +161,9 @@ function ProfileContextWrapper(props) {
                 current: selectedProfile.profile,
                 switchProfile,
                 updateSetting,
-                makeNewProfile
+                makeNewProfile,
+                addBookmark,
+                removeBookmark
             }}
         >
             {props.children}
