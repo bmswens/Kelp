@@ -23,7 +23,7 @@ import { useLocalStorage } from '@rehooks/local-storage'
 // custom
 import { LocationContext } from '../context/LocationContextWrapper'
 import { connectionString } from '../seaweed/filer'
-import { ProfileContex } from '../context/ProfileContextWrapper'
+import { ProfileContext } from '../context/ProfileContextWrapper'
 
 
 function RightClickMenu(props) {
@@ -34,9 +34,7 @@ function RightClickMenu(props) {
     const profile = React.useContext(ProfileContext)
 
     function remove() {
-        let tempFaves = [...favorites]
-        tempFaves.splice(index, 1)
-        setFavorites(tempFaves)
+        profile.removeBookmark(index)
         close()
     }
 

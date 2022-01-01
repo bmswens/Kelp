@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event'
 
 // help
 import { writeStorage } from '@rehooks/local-storage'
+import { ProfileContext, defaultProfile } from '../context/ProfileContextWrapper'
 
 // to test
 import { LocationContext } from '../context/LocationContextWrapper'
@@ -25,20 +26,28 @@ const favoriteFolder = {
     isFile: false
 }
 
-describe('<FavoriteItem> ', function() {
+describe('<FavoriteItem>', function() {
+    let profileContext
     beforeEach(() => {
+        profileContext = {
+            ...defaultProfile,
+            addBookmark: jest.fn(),
+            removeBookmark: jest.fn(),
+            bookmarks: [favoriteFile]
+        }
         render(
-            <FavoriteItem
-                data={favoriteFile}
-                index={0}
-            />
+            <ProfileContext.Provider value={profileContext}>
+                <FavoriteItem
+                    data={favoriteFile}
+                    index={0}
+                />
+            </ProfileContext.Provider>
         )
     })
     afterEach(() => {
         localStorage.clear()
     })
     it('should be able to be removed from favorites', async function() {
-        localStorage.setItem('favorites', JSON.stringify([favoriteFile]))
         let favoriteButton = screen.getByRole('button', { name: favoriteFile.shortName})
         fireEvent.contextMenu(favoriteButton)
         await waitFor(() => {
@@ -48,9 +57,7 @@ describe('<FavoriteItem> ', function() {
         let deleteButton = screen.getByRole('menuitem', { name: "remove favorite item" })
         userEvent.click(deleteButton)
         await waitFor(() => {
-            let favoritesString = localStorage.getItem('favorites')
-            let favorites = JSON.parse(favoritesString)
-            expect(favorites).toEqual([])
+            expect(profileContext.removeBookmark).toHaveBeenCalled()
         })
     })
 })

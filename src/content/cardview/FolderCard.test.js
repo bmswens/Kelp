@@ -5,8 +5,8 @@ import React from 'react'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-// localStorage hook
-import { useLocalStorage } from '@rehooks/local-storage'
+// help
+import { ProfileContext, defaultProfile } from '../../context/ProfileContextWrapper'
 
 // to test
 import FolderCard from './FolderCard'
@@ -38,7 +38,7 @@ const folder = {
 }
 
 describe('<Folder>', function() {
-    let locationState 
+    let locationState
     beforeEach(function() {
         locationState = {
             currentLocation: '/',
@@ -46,6 +46,7 @@ describe('<Folder>', function() {
             updateLocation: jest.fn(),
             goBack: jest.fn()
         }
+        
         render(
             <LocationContext.Provider value={locationState}>
                 <SelectionContextWrapper>
@@ -118,7 +119,8 @@ describe('parent ".." <Folder>', function() {
 })
 
 describe("The <Folder>'s <RightClickMenu>", function() {
-    let locationState 
+    let locationState
+    let profileContext
     beforeEach(function() {
         locationState = {
             currentLocation: '/new',
@@ -127,12 +129,18 @@ describe("The <Folder>'s <RightClickMenu>", function() {
             goBack: jest.fn(),
             refresh: jest.fn()
         }
+        profileContext = {
+            ...defaultProfile,
+            addBookmark: jest.fn()
+        }
         render(
-            <LocationContext.Provider value={locationState}>
-                <FolderCard
-                    data={folder}
-                />
-            </LocationContext.Provider>
+            <ProfileContext.Provider value={profileContext}>
+                <LocationContext.Provider value={locationState}>
+                    <FolderCard
+                        data={folder}
+                    />
+                </LocationContext.Provider>
+            </ProfileContext.Provider>
         )
         let fileButton = screen.getByRole('button', { name: folder.name })
         fireEvent.contextMenu(fileButton)
@@ -159,13 +167,7 @@ describe("The <Folder>'s <RightClickMenu>", function() {
     it('should allow the user to favorite a folder', function() {
         let button = screen.getByRole('menuitem', { name: "favorite folder" })
         userEvent.click(button)
-        let favoritesString = window.localStorage.getItem('favorites')
-        let favorites = JSON.parse(favoritesString)
-        expect(favorites).toEqual([{
-            fullPath: "/topics",
-            shortName: "topics",
-            isFile: false
-        }])
+        expect(profileContext.addBookmark).toHaveBeenCalled()
     })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement
