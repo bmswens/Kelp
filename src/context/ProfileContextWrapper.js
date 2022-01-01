@@ -62,7 +62,6 @@ function ProfileContextWrapper(props) {
         }
         else {
             let content = await Filer.getContent(`/.kelp/profiles/${selectedProfile.profile}.json`)
-            console.log(`/.kelp/profiles/${selectedProfile}.json`, content)
             const data = JSON.parse(content)
             tempSettings = data.settings
             tempBookmarks = data.bookmarks

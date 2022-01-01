@@ -2,12 +2,17 @@
 import React from 'react'
 
 // testing library
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // to test
 import SettingsDialog from './SettingsDialog'
 import ContextWrappers from '../context/ContextWrappers'
+
+// mock
+import Filer from '../seaweed/filer'
+import { defaultProfile } from '../context/ProfileContextWrapper'
+import { waitForDebugger } from 'inspector'
 
 function getSetting(name) {
     let resp = localStorage.getItem("settings")
@@ -27,6 +32,9 @@ describe('<SettingsDialog>', function() {
                 />
             </ContextWrappers>
         )
+    })
+    afterEach(() => {
+        jest.resetAllMocks()
     })
     it('should display the title', function() {
         let dialog = screen.getByRole('dialog', { name: "Settings" })
@@ -54,5 +62,31 @@ describe('<SettingsDialog>', function() {
         userEvent.click(switchButton)
         let darkSetting = getSetting('useDarkMode')
         expect(darkSetting).not.toBeTruthy()
+    })
+    it('should allow a user to select a profile from options', async function() {
+        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
+        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
+        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
+        let textField = screen.getByRole('textbox', { name: "select profile" })
+        userEvent.type(textField, "default")
+        let swithButton = screen.getByRole('button', { name: "switch profiles" })
+        userEvent.click(swithButton)
+        await waitFor(() => {
+            let text = screen.getByRole('textbox', { name: "select profile" })
+            expect(text).not.toBeNull()
+        })
+    })
+    it('should allow a user to create a new profile', async function() {
+        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
+        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
+        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
+        let textField = screen.getByRole('textbox', { name: "select profile" })
+        userEvent.type(textField, "test")
+        let swithButton = screen.getByRole('button', { name: "switch profiles" })
+        userEvent.click(swithButton)
+        await waitFor(() => {
+            let text = screen.getByRole('textbox', { name: "select profile" })
+            expect(text).not.toBeNull()
+        })
     })
 })

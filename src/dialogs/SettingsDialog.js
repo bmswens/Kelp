@@ -48,7 +48,7 @@ function ProfileSelector(props) {
                     inputValue={input}
                     onInputChange={(event, newValue) => setInput(newValue)}
                     options={profile.options}
-                    renderInput={(params) => <TextField {...params} label="Profile" />}
+                    renderInput={(params) => <TextField {...params} label="Profile" inputProps={{...params.inputProps, "aria-label": "select profile"}} />}
                 />
             </Grid>
             <Grid item xs={3}>
