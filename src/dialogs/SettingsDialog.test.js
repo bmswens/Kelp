@@ -7,12 +7,12 @@ import userEvent from '@testing-library/user-event'
 
 // to test
 import SettingsDialog from './SettingsDialog'
-import ContextWrappers from '../context/ContextWrappers'
+import ThemeWrapper from '../context/ThemeWrapper'
 
 // mock
 import { defaultProfile } from '../context/ProfileContextWrapper'
 import { ProfileContext } from '../context/ProfileContextWrapper'
-import { profile } from 'console'
+
 
 function getSetting(name) {
     let resp = localStorage.getItem("settings")
@@ -34,10 +34,12 @@ describe('<SettingsDialog>', function() {
         close = jest.fn()
         render(
             <ProfileContext.Provider value={profileContext}>
-                <SettingsDialog
-                    open={true}
-                    close={close}
-                />
+                <ThemeWrapper>
+                    <SettingsDialog
+                        open={true}
+                        close={close}
+                    />
+                </ThemeWrapper>
             </ProfileContext.Provider>
         )
     })
