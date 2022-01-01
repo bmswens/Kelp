@@ -23,6 +23,9 @@ function getSetting(name) {
 describe('<SettingsDialog>', function() {
     let close
     beforeEach(() => {
+        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
+        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
+        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
         close = jest.fn()
         render(
             <ContextWrappers>
@@ -64,9 +67,6 @@ describe('<SettingsDialog>', function() {
         expect(darkSetting).not.toBeTruthy()
     })
     it('should allow a user to select a profile from options', async function() {
-        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
-        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
-        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
         let textField = screen.getByRole('textbox', { name: "select profile" })
         userEvent.type(textField, "default")
         let swithButton = screen.getByRole('button', { name: "switch profiles" })
@@ -77,9 +77,6 @@ describe('<SettingsDialog>', function() {
         })
     })
     it('should allow a user to create a new profile', async function() {
-        Filer.getFiles = jest.fn(async () => [{FullPath: "/.kelp/profiles/default.json"}])
-        Filer.getContent = jest.fn(async () => JSON.stringify({...defaultProfile, current: "default"}))
-        Filer.uploadFile = jest.fn(async () => Filer.getFiles = jest.fn(() => [{FullPath: "/.kelp/profiles/default.json"}, {FullPath: "/.kelp/profiles/test.json"}]))
         let textField = screen.getByRole('textbox', { name: "select profile" })
         userEvent.type(textField, "test")
         let swithButton = screen.getByRole('button', { name: "switch profiles" })
