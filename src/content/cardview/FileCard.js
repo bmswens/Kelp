@@ -148,8 +148,8 @@ function FileCard(props) {
         close()
     }
 
-    function del() {
-        Filer.deleteItem(props.data.FullPath)
+    async function del() {
+        await Filer.deleteItem(props.data.FullPath)
         context.refresh()
     }
 

@@ -26,7 +26,7 @@ const defaultClipboard = {
 
 function SelectionContextWrapper(props) {
 
-    const [selected, setSelected] = React.useState([])
+    const [selected, _setSelected] = React.useState([])
 
     function handle(path, isFile) {
         let tempSelected = [...selected]
@@ -40,15 +40,13 @@ function SelectionContextWrapper(props) {
         }
         setSelected(tempSelected)
     }
-    
-    function clear() {
-        setSelected([])
-    }
 
     const locationContext = React.useContext(LocationContext)
+    const locationContextRef = React.useRef(locationContext)
+    locationContextRef.current = locationContext
 
     React.useEffect(() => {
-        clear()
+        setSelected([])
     }, [locationContext.currentLocation])
 
     // deletion of multiple
@@ -56,73 +54,113 @@ function SelectionContextWrapper(props) {
 
     async function del() {
         for (let item of selected) {
-            await Filer.deleteItem(item)
+            await Filer.deleteItem(item.path)
         }
         setSelected([])
         locationContext.refresh()
     }
 
-    function handleKeydown(event) {
-        if (event.code === "Delete" && selected.length) {
-            setOpen(true)
-        }
-    }
-
-    document.addEventListener('keydown', handleKeydown)
-
     // clipboard emulation
-    const [clipboard, setClipboard] = React.useState(defaultClipboard)
     const [alertOpen, setAlertOpen] = React.useState(false)
     const [alertText, setAlertText] = React.useState('')
+    const [clipboard, _setClipboard] = React.useState(defaultClipboard)
 
+    // refs have to be used for event listeners
+    const clipboardRef = React.useRef(clipboard)
+
+    function setClipboard(obj) {
+        clipboardRef.current = obj
+        _setClipboard(obj)
+    }
+
+    const selectedRef = React.useRef(selected)
+
+    function setSelected(selectedList) {
+        selectedRef.current = selectedList
+        _setSelected(selectedList)
+    }
+    
     function closeAlert() {
         setAlertOpen(false)
+        locationContext.refresh()
     }
-
+    
     function copy() {
         setClipboard({
-            content: selected,
+            content: selectedRef.current,
             method: "copy"
         })
-        setAlertText(`Copied ${selected.length} items!`)
+        setAlertText(`Copied ${selectedRef.current.length} items!`)
         setAlertOpen(true)
         setSelected([])
     }
-
+    
     function cut() {
         setClipboard({
-            content: selected,
+            content: selectedRef.current,
             method: "cut"
         })
-        setAlertText(`Cut ${selected.length} items!`)
+        setAlertText(`Cut ${selectedRef.current.length} items!`)
         setAlertOpen(true)
         setSelected([])
     }
-
-    function paste() {
-        let files = []
-        for (let obj of clipboard.content) {
+    
+    async function paste() {
+        for (let obj of clipboardRef.current.content) {
             if (!obj.isFile) {
                 continue
             }
-            let rawContent = Filer.getRawContent(obj.path)
+            let rawContent = await Filer.getRawContent(obj.path)
             let name = getName(obj.path)
             let file = new File([rawContent], name)
-            let newPath = getFullPath(name, locationContext.currentLocation)
-            Filer.uploadFile(newPath, file)
-            if (clipboard.method === "cut") {
+            let newPath = getFullPath(name, locationContextRef.current.currentLocation)
+            await Filer.uploadFile(newPath, file)
+            if (clipboardRef.current.method === "cut") {
                 Filer.deleteItem(obj.path)
             }
         }
+        setAlertText(`Pasted ${clipboardRef.current.content.length} items!`)
+        setAlertOpen(true)
+        locationContextRef.current.refresh()
         setClipboard(defaultClipboard)
     }
+
+    function handleCutCopyPaste(event) {
+        if (event.key === "c") {
+            copy()
+        }
+        else if (event.key === "x") {
+            cut()
+        }
+        else if (event.key === "v") {
+            paste()
+        }
+    }
+
+    const handleCutCopyPasteRef = React.useRef(handleCutCopyPaste)
+    handleCutCopyPasteRef.current = handleCutCopyPaste
+
+    // hotkeys
+    React.useEffect(() => {
+        function handleKeydown(event) {
+            if (event.repeat) {
+                return
+            }
+            if (event.code === "Delete" && selectedRef.current.length) {
+                setOpen(true)
+            }
+            else if (event.ctrlKey) {
+                handleCutCopyPasteRef.current(event)
+            }
+        }
+        document.addEventListener('keydown', handleKeydown)
+    }, [])
 
     return (
         <SelectionContext.Provider
             value={{
                 selected,
                 handle,
-                clear,
                 clipboard,
                 cut,
                 copy,
@@ -137,7 +175,7 @@ function SelectionContextWrapper(props) {
                 open={open}
             />
             <SuccessAlert
-                alrt={alertOpen}
+                open={alertOpen}
                 close={closeAlert}
                 text={alertText}
             />

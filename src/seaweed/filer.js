@@ -24,7 +24,8 @@ async function getContent(file) {
 
 async function getRawContent(file) {
     let response = await fetch(`${connectionString}${file}`)
-    return response.blob()
+    let output = await response.blob()
+    return output
 }
 
 async function uploadFile(path, file) {

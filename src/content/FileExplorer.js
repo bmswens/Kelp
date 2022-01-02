@@ -33,7 +33,7 @@ function FileExplorer(props) {
             setFiles(output)
         }
         loadFiles()
-    }, [context.currentLocation, profile.settings.showDotFiles])
+    }, [context.currentLocation, profile.settings.showDotFiles, context.refreshCount])
 
 
     return (
