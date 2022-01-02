@@ -23,12 +23,15 @@
 | Confirm | **y** | True |
 | Cancel | **n** | True |
 
-## Selection
+## File Explorer
+### Selection
 | Function | Shortcut | Implemented |
 | -------- | :------: | ----------- |
 | Download | **Enter** | False |
 | Delete | **Delete** | True |
 | Select All | **Ctrl + a** | False|
-| Copy | **Ctrl + c** | False |
-| Cut | **Ctrl + x** | False |
-| Paste | **Ctrl + v** | False|
+| Copy | **Ctrl + c** | True<sup>1</sup> |
+| Cut | **Ctrl + x** | True<sup>1</sup> |
+| Paste | **Ctrl + v** | True<sup>1</sup> |
+
+<sup>1</sup> Only implemented for files.
