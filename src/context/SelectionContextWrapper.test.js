@@ -63,6 +63,7 @@ describe('<SelectionContextWrapper>', function() {
         global.fetch = jest.fn()
         Filer.deleteItem = jest.fn()
         Filer.uploadFile = jest.fn()
+        Filer.getRawContent = jest.fn(() => new Blob())
     })
     beforeEach(() => {
         render(
