@@ -59,9 +59,11 @@ function ContextTester(props) {
 }
 
 describe('<SelectionContextWrapper>', function() {
-    beforeEach(() => {
+    beforeAll(() => {
         Filer.deleteItem = jest.fn()
         Filer.uploadFile = jest.fn()
+    })
+    beforeEach(() => {
         render(
             <LocationContextWrapper>
                 <SelectionContextWrapper>
@@ -70,8 +72,8 @@ describe('<SelectionContextWrapper>', function() {
             </LocationContextWrapper>
         )
     })
-    afterEach(() => {
-        jest.restoreAllMocks()
+    afterAll(() => {
+        jest.clearAllMocks()
     })
     it('should allow the user to add items to the current selection state', async function() {
         let handleButton = screen.getByRole('button', { name: 'handle item'})
@@ -133,7 +135,6 @@ describe('<SelectionContextWrapper>', function() {
     })
     it('should allow the user to copy and paste files', async function() {
         // GitHub actions was getting network failure
-        Filer.uploadFile = jest.fn()
         let handleButton = screen.getByRole('button', { name: 'handle item'})
         userEvent.click(handleButton)
         let handleFolder = screen.getByRole('button', { name: 'handle folder'})
