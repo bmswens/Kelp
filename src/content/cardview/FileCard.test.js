@@ -118,7 +118,9 @@ describe("The <File>'s <RightClickMenu>", function() {
         })
         let confirmButton = screen.getByRole('button', { name: 'confirm' })
         userEvent.click(confirmButton)
-        expect(global.fetch).toHaveBeenCalled()
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
     })
     it('should allow the user to favorite a folder', function() {
         let button = screen.getByRole('menuitem', { name: "favorite file" })

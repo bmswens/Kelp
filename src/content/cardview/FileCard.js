@@ -115,12 +115,12 @@ function FileCard(props) {
     const selectionContext = React.useContext(SelectionContext)
 
     // double click
-    const isSelected = selectionContext.selected.includes(props.data.FullPath)
+    const isSelected = selectionContext.selected.map(obj => obj.path).includes(props.data.FullPath)
     const selfRef = React.useRef()
 
     useDoubleClick({
         onSingleClick: function () {
-            selectionContext.handle(props.data.FullPath)
+            selectionContext.handle(props.data.FullPath, true)
         },
         onDoubleClick: function () {
             download()
@@ -148,8 +148,8 @@ function FileCard(props) {
         close()
     }
 
-    function del() {
-        Filer.deleteItem(props.data.FullPath)
+    async function del() {
+        await Filer.deleteItem(props.data.FullPath)
         context.refresh()
     }
 

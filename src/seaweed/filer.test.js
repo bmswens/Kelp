@@ -39,6 +39,11 @@ describe('The Filer Object', function() {
         expect(content).toEqual('file content')
         expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/example.log')
     })
+    it('should respond with the raw content of a file', async function() {
+        global.fetch = jest.fn().mockResolvedValue({ blob: () => {}})
+        let content = await Filer.getRawContent('/example.log')
+        expect(global.fetch).toHaveBeenCalledWith('http://localhost:8888/example.log')
+    })
     it('should be able to upload a file', async function() {
         global.fetch = jest.fn().mockResolvedValue({ok: true})
         let f = new File(['Hello World!'], 'example.txt')

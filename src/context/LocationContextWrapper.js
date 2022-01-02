@@ -5,6 +5,7 @@ import React from 'react'
 const LocationContext = React.createContext({
     currentLocation: '/',
     history: [],
+    refreshCount: 0,
     updateLocation: /* istanbul ignore next */ () => {},
     goBack: /* istanbul ignore next */ () => {},
     refresh: /* istanbul ignore next */ () => {}

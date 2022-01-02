@@ -22,6 +22,12 @@ async function getContent(file) {
     return response.text()
 }
 
+async function getRawContent(file) {
+    let response = await fetch(`${connectionString}${file}`)
+    let output = await response.blob()
+    return output
+}
+
 async function uploadFile(path, file) {
     let formData = new FormData()
     formData.append(path, file)
@@ -52,7 +58,8 @@ const Filer = {
     getContent,
     uploadFile,
     createFolder,
-    deleteItem
+    deleteItem,
+    getRawContent
 }
 
 export default Filer
