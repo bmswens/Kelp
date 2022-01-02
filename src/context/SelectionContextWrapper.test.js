@@ -132,6 +132,8 @@ describe('<SelectionContextWrapper>', function() {
         })
     })
     it('should allow the user to copy and paste files', async function() {
+        // GitHub actions was getting network failure
+        Filer.uploadFile = jest.fn()
         let handleButton = screen.getByRole('button', { name: 'handle item'})
         userEvent.click(handleButton)
         let handleFolder = screen.getByRole('button', { name: 'handle folder'})
