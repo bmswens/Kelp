@@ -60,6 +60,7 @@ function ContextTester(props) {
 
 describe('<SelectionContextWrapper>', function() {
     beforeAll(() => {
+        global.fetch = jest.fn()
         Filer.deleteItem = jest.fn()
         Filer.uploadFile = jest.fn()
     })
