@@ -115,13 +115,13 @@ function FolderCard(props) {
     const selectionContext = React.useContext(SelectionContext)
 
     // double click
-    const isSelected = selectionContext.selected.includes(props.data.FullPath)
+    const isSelected = selectionContext.selected.map(obj => obj.path).includes(props.data.FullPath)
     const selfRef = React.useRef()
 
     useDoubleClick({
         onSingleClick: function() {
             if (props.data.name !== '..') {
-                selectionContext.handle(props.data.FullPath)
+                selectionContext.handle(props.data.FullPath, false)
             }
         },
         onDoubleClick: function() {

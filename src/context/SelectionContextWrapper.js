@@ -5,6 +5,8 @@ import React from 'react'
 import { LocationContext } from './LocationContextWrapper'
 import DeleteMultipleDialog from '../dialogs/DeleteMultipleDialog'
 import Filer from '../seaweed/filer'
+import { getName, getFullPath } from '../seaweed/file'
+import SuccessAlert from '../snackbars/SuccessAlert'
 
 // location context
 const SelectionContext = React.createContext({
@@ -13,19 +15,28 @@ const SelectionContext = React.createContext({
     clear: /* istanbul ignore next */ () => {}
 })
 
+const defaultClipboard = {
+    content: [],
+    method: "copy",
+    cut: /* istanbul ignore next */ () => {},
+    copy: /* istanbul ignore next */ () => {},
+    paste: /* istanbul ignore next */ () => {}
+}
+
 
 function SelectionContextWrapper(props) {
 
     const [selected, setSelected] = React.useState([])
 
-    function handle(path) {
+    function handle(path, isFile) {
         let tempSelected = [...selected]
-        if (tempSelected.includes(path)) {
-            let index = tempSelected.indexOf(path)
+        let tempPaths = tempSelected.map(obj => obj.path)
+        if (tempPaths.includes(path)) {
+            let index = tempPaths.indexOf(path)
             tempSelected.splice(index, 1)
         }
         else {
-            tempSelected.push(path)
+            tempSelected.push({path, isFile})
         }
         setSelected(tempSelected)
     }
@@ -59,20 +70,76 @@ function SelectionContextWrapper(props) {
 
     document.addEventListener('keydown', handleKeydown)
 
+    // clipboard emulation
+    const [clipboard, setClipboard] = React.useState(defaultClipboard)
+    const [alertOpen, setAlertOpen] = React.useState(false)
+    const [alertText, setAlertText] = React.useState('')
+
+    function closeAlert() {
+        setAlertOpen(false)
+    }
+
+    function copy() {
+        setClipboard({
+            content: selected,
+            method: "copy"
+        })
+        setAlertText(`Copied ${selected.length} items!`)
+        setAlertOpen(true)
+        setSelected([])
+    }
+
+    function cut() {
+        setClipboard({
+            content: selected,
+            method: "cut"
+        })
+        setAlertText(`Cut ${selected.length} items!`)
+        setAlertOpen(true)
+        setSelected([])
+    }
+
+    function paste() {
+        let files = []
+        for (let obj of clipboard.content) {
+            if (!obj.isFile) {
+                continue
+            }
+            let rawContent = Filer.getRawContent(obj.path)
+            let name = getName(obj.path)
+            let file = new File([rawContent], name)
+            let newPath = getFullPath(name, locationContext.currentLocation)
+            Filer.uploadFile(newPath, file)
+            if (clipboard.method === "cut") {
+                Filer.deleteItem(obj.path)
+            }
+        }
+        setClipboard(defaultClipboard)
+    }
+
     return (
         <SelectionContext.Provider
             value={{
                 selected,
                 handle,
-                clear
+                clear,
+                clipboard,
+                cut,
+                copy,
+                paste
             }}
         >
             {props.children}
             <DeleteMultipleDialog
-                files={selected}
+                files={selected.map(obj => obj.path)}
                 del={del}
                 close={() => setOpen(false)}
                 open={open}
+            />
+            <SuccessAlert
+                alrt={alertOpen}
+                close={closeAlert}
+                text={alertText}
             />
         </SelectionContext.Provider>
     )
