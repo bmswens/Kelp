@@ -43,6 +43,14 @@ function ContextTester(props) {
         selectionContext.paste()
     }
 
+    function copyOne() {
+        selectionContext.copy({path: "/copy/file", isFile: true})
+    }
+
+    function cutOne() {
+        selectionContext.cut({path: "/cut/file", isFile: true})
+    }
+
     return (
         <React.Fragment>
             <button aria-label="change location" onClick={handleChangeLocation}>Change</button>
@@ -50,6 +58,8 @@ function ContextTester(props) {
             <button aria-label="handle folder" onClick={handleFolder}>Handle Folder</button>
             <button aria-label="copy" onClick={copy}>Copy</button>
             <button aria-label="cut" onClick={cut}>Cut</button>
+            <button aria-label="copy one" onClick={copyOne}>Copy One</button>
+            <button aria-label="cut one" onClick={cutOne}>Cut One</button>
             <button aria-label="paste" onClick={paste}>Paste</button>
             <p role="paragraph" data-testid="selected">{selectionContext.selected.map(obj => obj.path).join(' ')}</p>
             <p role="paragraph" data-testid="clipboard-content">{selectionContext.clipboard.content.map(obj => obj.path).join(', ')}</p>
@@ -217,5 +227,25 @@ describe('<SelectionContextWrapper>', function() {
     })
     it('should not react to other hotkeys', function() {
         fireEvent.keyDown(document, { key: "r", ctrlKey: true})
+    })
+    it('should be able to copy single files', async function() {
+        let copyButton = screen.getByRole('button', { name: "copy one" })
+        userEvent.click(copyButton)
+        await waitFor(() => {
+            let content = screen.getByTestId('clipboard-content')
+            expect(content.innerHTML).toEqual('/copy/file')
+            let method = screen.getByTestId('clipboard-method')
+            expect(method.innerHTML).toEqual('copy')
+        })
+    })
+    it('should be able to cut single files', async function() {
+        let cutBotton = screen.getByRole('button', { name: "cut one" })
+        userEvent.click(cutBotton)
+        await waitFor(() => {
+            let content = screen.getByTestId('clipboard-content')
+            expect(content.innerHTML).toEqual('/cut/file')
+            let method = screen.getByTestId('clipboard-method')
+            expect(method.innerHTML).toEqual('cut')
+        })
     })
 })

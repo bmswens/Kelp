@@ -12,6 +12,7 @@ import { ProfileContext, defaultProfile } from '../../context/ProfileContextWrap
 import FileCard from './FileCard'
 import LocationContextWrapper from '../../context/LocationContextWrapper'
 import SelectionContextWrapper from '../../context/SelectionContextWrapper'
+import { SelectionContext } from '../../context/SelectionContextWrapper'
 
 const file = {
     "FullPath": "/example.log",
@@ -83,17 +84,26 @@ describe('<File>', function() {
 
 describe("The <File>'s <RightClickMenu>", function() {
     let profileContext
+    let selectionContext
     beforeEach(function() {
         profileContext = {
             ...defaultProfile,
             addBookmark: jest.fn()
         }
+        selectionContext = {
+            selected: [],
+            handle: jest.fn(),
+            copy: jest.fn(),
+            cut: jest.fn()
+        }
         render(
             <ProfileContext.Provider value={profileContext}>
                 <LocationContextWrapper>
-                    <FileCard
-                        data={file}
-                    />
+                    <SelectionContext.Provider value={selectionContext}>
+                        <FileCard
+                            data={file}
+                        />
+                    </SelectionContext.Provider>
                 </LocationContextWrapper>
             </ProfileContext.Provider>
         )
@@ -122,10 +132,20 @@ describe("The <File>'s <RightClickMenu>", function() {
             expect(global.fetch).toHaveBeenCalled()
         })
     })
-    it('should allow the user to favorite a folder', function() {
+    it('should allow the user to favorite a file', function() {
         let button = screen.getByRole('menuitem', { name: "favorite file" })
         userEvent.click(button)
         expect(profileContext.addBookmark).toHaveBeenCalled()
+    })
+    it('should allow the user to copy a file', function() {
+        let button = screen.getByRole('menuitem', { name: "copy file" })
+        userEvent.click(button)
+        expect(selectionContext.copy).toHaveBeenCalled()
+    })
+    it('should allow a user to cut a file', function() {
+        let button = screen.getByRole('menuitem', { name: "cut file" })
+        userEvent.click(button)
+        expect(selectionContext.cut).toHaveBeenCalled()
     })
     it('should allow the user to view the properties of the file', function() {
         // TODO: implement

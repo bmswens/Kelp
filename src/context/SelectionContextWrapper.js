@@ -85,22 +85,38 @@ function SelectionContextWrapper(props) {
         locationContext.refresh()
     }
     
-    function copy() {
-        setClipboard({
-            content: selectedRef.current,
-            method: "copy"
-        })
-        setAlertText(`Copied ${selectedRef.current.length} items!`)
+    function copy(obj=null) {
+        if (obj) {
+            setClipboard({
+                content: [obj],
+                method: "copy"
+            })
+        }
+        else {
+            setClipboard({
+                content: selectedRef.current,
+                method: "copy"
+            })
+        }
+        setAlertText(`Copied ${selectedRef.current.length || 1} items!`)
         setAlertOpen(true)
         setSelected([])
     }
     
-    function cut() {
-        setClipboard({
-            content: selectedRef.current,
-            method: "cut"
-        })
-        setAlertText(`Cut ${selectedRef.current.length} items!`)
+    function cut(obj=null) {
+        if (obj) {
+            setClipboard({
+                content: [obj],
+                method: "cut"
+            })
+        }
+        else {
+            setClipboard({
+                content: selectedRef.current,
+                method: "cut"
+            })
+        }
+        setAlertText(`Cut ${selectedRef.current.length || 1} items!`)
         setAlertOpen(true)
         setSelected([])
     }

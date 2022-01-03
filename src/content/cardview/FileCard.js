@@ -20,6 +20,8 @@ import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 import InfoIcon from '@mui/icons-material/Info'
 import DeleteIcon from '@mui/icons-material/Delete'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import ContentCutIcon from '@mui/icons-material/ContentCut'
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
@@ -48,6 +50,9 @@ function RightClickMenu(props) {
     // for favorite
     const { favorite } = props
 
+    // cut and copy
+    const { cut, copy } = props
+
     return (
         <React.Fragment>
             <Menu
@@ -75,6 +80,31 @@ function RightClickMenu(props) {
                         <BookmarkIcon />
                     </ListItemIcon>
                     <ListItemText>Favorite</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem
+                    onClick={() => {
+                        copy()
+                        close()
+                    }}
+                    aria-label="copy file"
+                >
+                    <ListItemIcon>
+                        <ContentCopyIcon />
+                    </ListItemIcon>
+                    <ListItemText>Copy</ListItemText>
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        cut()
+                        close()
+                    }}
+                    aria-label="cut file"
+                >
+                    <ListItemIcon>
+                        <ContentCutIcon />
+                    </ListItemIcon>
+                    <ListItemText>Cut</ListItemText>
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
@@ -165,6 +195,15 @@ function FileCard(props) {
         profile.addBookmark(bookmark)
         close()
     }
+    
+    // cut and copy
+    function cut() {
+        selectionContext.cut({path: props.data.FullPath, isFile: true})
+    }
+
+    function copy() {
+        selectionContext.copy({path: props.data.FullPath, isFile: true})
+    }
 
     return (
         <Grid
@@ -228,6 +267,8 @@ function FileCard(props) {
                 del={del}
                 name={props.data.name}
                 favorite={favorite}
+                cut={cut}
+                copy={copy}
             />
         </Grid>
     )
