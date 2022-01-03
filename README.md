@@ -36,6 +36,7 @@ Note: in this environment, you won't be able to get cluster information from `we
 git clone https://github.com/bmswens/Kelp.git
 cd Kelp
 yarn install
+cp example.env .env
 npm run start:dev
 ```
 
@@ -45,6 +46,7 @@ This environment will build a stack and emulate a cluster deployment with nginx 
 git clone https://github.com/bmswens/Kelp.git
 cd Kelp
 yarn install
+cp example.env .env
 npm run start:staging
 ```
 
