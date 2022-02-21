@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Material UI
-import { IconButton, useTheme } from '@mui/material'
+import { IconButton } from '@mui/material'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -12,16 +12,21 @@ import DialogActions from '@mui/material/DialogActions'
 import CloseIcon from '@mui/icons-material/Close'
 import DownloadIcon from '@mui/icons-material/Download'
 
+// custom
+import { connectionString } from '../seaweed/filer'
+
 
 function ImageDisplayDialog(props) {
 
     const { open, close, title, source, download } = props
+    let imagePath = `${connectionString}${source}`
 
     return (
         <Dialog
             open={open}
             onClose={close}
             fullWidth
+            maxWidth="xl"
         >
             <DialogTitle>
                 {title}
@@ -38,13 +43,17 @@ function ImageDisplayDialog(props) {
                     <CloseIcon fontSize="large" />
                 </IconButton>
             </DialogTitle>
-            <DialogContent dividers>
+            <DialogContent dividers sx={{ display: "flex", justifyContent: 'center' }}>
                 <img
                     alt={title}
-                    src={source}
+                    src={imagePath}
+                    style={{ 
+                        maxWidth: "100%", 
+                        maxHeight: "calc(80vh - 64px)"
+                     }}
                 />
             </DialogContent>
-            <DialogActions sx={{ display: "flex", justifyContent: 'center' }}>
+            <DialogActions sx={{ display: "flex", justifyContent: 'right' }}>
                 <IconButton
                     onClick={download}
                     aria-label="download"
