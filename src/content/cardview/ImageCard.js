@@ -251,7 +251,10 @@ function ImageCard(props) {
             >
                 <Box sx={{
                     display: 'flex',
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    alignItems: "center"
                 }}
                 >
                     <CardContent
@@ -270,16 +273,21 @@ function ImageCard(props) {
                     <CardContent
                         sx={{
                             flex: "auto",
-                            userSelect: "none"
+                            userSelect: "none",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "inline"
                         }}
                     >
                         <Typography
                             variant="h6"
+                            noWrap
                         >
                             {props.data.name}
                         </Typography>
                         <Typography
                             variant="subtitle2"
+                            noWrap
                         >
                             {props.data.Mtime}
                         </Typography>
