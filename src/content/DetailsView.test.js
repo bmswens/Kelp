@@ -97,7 +97,7 @@ describe('<DetailsView> with files', function() {
     })
     it('should be able to delete selected files', async function() {
         global.fetch = jest.fn().mockResolvedValue({ok: true})
-        let checkBoxes = screen.getAllByRole("checkbox", { name: "Select Row checkbox"})
+        let checkBoxes = screen.getAllByRole("checkbox", { name: "Select row"})
         for (let checkbox of checkBoxes) {
             userEvent.click(checkbox, { bubbles: true })
         }
