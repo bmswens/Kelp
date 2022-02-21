@@ -9582,7 +9582,8 @@
   "version" "17.0.2"
 
 "react-mui-dropzone@https://github.com/bmswens/material-ui-dropzone.git":
-  "resolved" "git+ssh://git@github.com/bmswens/material-ui-dropzone.git#593b45be2577b502aca826d52b23675fd78861e7"
+  "integrity" "sha512-g15lZZQyf9/xjc5iSsSu9OgQMFwDGwr+MvSa9q/8n1R+Okl01i/w+FxFaAVc/vB+Mma/V0X2AqxsOVDCBYqIhg=="
+  "resolved" "git+ssh://git@github.com/bmswens/material-ui-dropzone.git"
   "version" "4.0.4"
   dependencies:
     "@babel/runtime" "^7.4.4"
