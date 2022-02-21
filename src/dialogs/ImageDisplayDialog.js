@@ -12,14 +12,10 @@ import DialogActions from '@mui/material/DialogActions'
 import CloseIcon from '@mui/icons-material/Close'
 import DownloadIcon from '@mui/icons-material/Download'
 
-// custom
-import { connectionString } from '../seaweed/filer'
-
 
 function ImageDisplayDialog(props) {
 
     const { open, close, title, source, download } = props
-    let imagePath = `${connectionString}${source}`
 
     return (
         <Dialog
@@ -46,7 +42,7 @@ function ImageDisplayDialog(props) {
             <DialogContent dividers sx={{ display: "flex", justifyContent: 'center' }}>
                 <img
                     alt={title}
-                    src={imagePath}
+                    src={source}
                     style={{ 
                         maxWidth: "100%", 
                         maxHeight: "calc(80vh - 64px)"

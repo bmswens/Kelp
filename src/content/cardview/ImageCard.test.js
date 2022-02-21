@@ -76,6 +76,12 @@ describe('<ImageCard>', function() {
             let title = screen.getByRole('dialog', { name: file.name })
             expect(title).not.toBeNull()
         })
+        let closeButton = screen.getByRole("button", { name: "close" })
+        userEvent.click(closeButton)
+        await waitFor(() => {
+            let title = screen.queryByRole('dialog', { name: file.name })
+            expect(title).toBeNull()
+        })
     })
     it('should open a context menu when right clicked', async function() {
         let button = screen.getByRole('button', { name: file.name })

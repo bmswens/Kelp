@@ -7,7 +7,33 @@ import Grid from '@mui/material/Grid'
 // custom
 import FileCard from './FileCard'
 import FolderCard from './FolderCard'
+import ImageCard from './ImageCard'
 import { useTheme } from '@mui/material'
+
+function handleFileType(obj) {
+    let output = null
+    let supportedImageTypes = [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".bmp",
+        ".ico"
+    ]
+    let isImage = false
+    for (let extension of supportedImageTypes) {
+        if (obj.name.includes(extension)) {
+            isImage = true
+            break
+        }
+    }
+    if (isImage) {
+        output = <ImageCard data={obj} key={obj.name} />
+    }
+    else {
+        output = <FileCard data={obj} key={obj.name} />
+    }
+    return output
+}
 
 function CardView(props) {
 
@@ -19,7 +45,8 @@ function CardView(props) {
 
     for (let obj of files) {
         if (obj.isFile) {
-            children.push(<FileCard data={obj} key={obj.name} />)
+            let card = handleFileType(obj)
+            children.push(card)
         }
         else {
             children.push(<FolderCard data={obj} key={obj.name} />)
