@@ -26,6 +26,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm i -g npm@latest
     - run: npm install
     - run: npm run test:CI
     - name: Coveralls
