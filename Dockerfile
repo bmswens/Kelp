@@ -10,13 +10,11 @@ ENV REACT_APP_FILER_PATH=/filer \
 
 WORKDIR /app
 COPY ./package.json ./
-COPY ./yarn.lock ./
-COPY ./.yarnrc.yml ./
-COPY ./.yarn/releases/yarn-3.1.1.cjs ./.yarn/releases/
-RUN yarn set version berry
-RUN yarn install --network-timeout 300000
+COPY ./package-lock.json ./
+RUN npm config set fetch-retry-maxtimeout=300000
+RUN npm install 
 COPY . ./
-RUN yarn build
+RUN npm run build
 
 # final stage
 FROM node:14
