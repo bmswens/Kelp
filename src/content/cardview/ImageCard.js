@@ -15,17 +15,16 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box'
 
 // Material UI Icons
-import DescriptionIcon from '@mui/icons-material/Description'
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 import InfoIcon from '@mui/icons-material/Info'
 import DeleteIcon from '@mui/icons-material/Delete'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ContentCutIcon from '@mui/icons-material/ContentCut'
+import PreviewIcon from '@mui/icons-material/Preview';
 
 // use-double-click
 import useDoubleClick from 'use-double-click'
-
 
 // custom
 import Filer, { connectionString } from '../../seaweed/filer'
@@ -33,10 +32,11 @@ import { LocationContext } from '../../context/LocationContextWrapper'
 import DeleteItemConfirmation from '../../dialogs/DeleteItemConfirmation'
 import { SelectionContext } from '../../context/SelectionContextWrapper'
 import { ProfileContext } from '../../context/ProfileContextWrapper'
+import ImageDisplayDialog from '../../dialogs/ImageDisplayDialog'
 
 
 function RightClickMenu(props) {
-    const { open, close, download } = props
+    const { open, close, download, openPreview } = props
     const { anchorElement } = props
 
     // for deletion
@@ -56,15 +56,28 @@ function RightClickMenu(props) {
     return (
         <React.Fragment>
             <Menu
-                aria-label="file context menu"
+                aria-label="image context menu"
                 role="menu"
                 anchorEl={anchorElement}
                 open={open}
                 onClose={close}
             >
                 <MenuItem
+                    onClick={() => {
+                        openPreview()
+                        close()
+                    }}
+                    aria-label="open image"
+                >
+                    <ListItemIcon>
+                        <PreviewIcon />
+                    </ListItemIcon>
+                    <ListItemText>Open</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem
                     onClick={download}
-                    aria-label="open file"
+                    aria-label="download image"
                 >
                     <ListItemIcon>
                         <DownloadForOfflineIcon />
@@ -74,7 +87,7 @@ function RightClickMenu(props) {
                 <Divider />
                 <MenuItem
                     onClick={favorite}
-                    aria-label="favorite file"
+                    aria-label="favorite image"
                 >
                     <ListItemIcon>
                         <BookmarkIcon />
@@ -87,7 +100,7 @@ function RightClickMenu(props) {
                         copy()
                         close()
                     }}
-                    aria-label="copy file"
+                    aria-label="copy image"
                 >
                     <ListItemIcon>
                         <ContentCopyIcon />
@@ -99,7 +112,7 @@ function RightClickMenu(props) {
                         cut()
                         close()
                     }}
-                    aria-label="cut file"
+                    aria-label="cut image"
                 >
                     <ListItemIcon>
                         <ContentCutIcon />
@@ -111,7 +124,7 @@ function RightClickMenu(props) {
                         setDeleteItemOpen(true)
                         close()
                     }}
-                    aria-label="delete file"
+                    aria-label="delete image"
                 >
                     <ListItemIcon>
                         <DeleteIcon />
@@ -138,7 +151,7 @@ function RightClickMenu(props) {
 }
 
 
-function FileCard(props) {
+function ImageCard(props) {
 
     const theme = useTheme()
     const context = React.useContext(LocationContext)
@@ -153,7 +166,7 @@ function FileCard(props) {
             selectionContext.handle(props.data.FullPath, true)
         },
         onDoubleClick: function () {
-            download()
+            openPreview()
         },
         ref: selfRef
     })
@@ -205,6 +218,18 @@ function FileCard(props) {
         selectionContext.copy({path: props.data.FullPath, isFile: true})
     }
 
+    // Image 
+    let source = `${connectionString}${props.data.FullPath}`
+    let alt = `${props.data.name} thumbnail`
+
+    const [previewOpen, setPreviewOpen] = React.useState(false)
+    function closePreview() {
+        setPreviewOpen(false)
+    }
+    function openPreview() {
+        setPreviewOpen(true)
+    }
+
     return (
         <Grid
             item
@@ -229,6 +254,7 @@ function FileCard(props) {
                     flexDirection: 'row',
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    alignItems: "center"
                 }}
                 >
                     <CardContent
@@ -236,10 +262,12 @@ function FileCard(props) {
                             flex: "1"
                         }}
                     >
-                        <DescriptionIcon
-                            sx={{
-                                fontSize: "56px"
+                        <img
+                            style={{
+                                maxWidth: "100%"
                             }}
+                            src={source}
+                            alt={alt}
                         />
                     </CardContent>
                     <CardContent
@@ -276,10 +304,18 @@ function FileCard(props) {
                 favorite={favorite}
                 cut={cut}
                 copy={copy}
+                openPreview={openPreview}
+            />
+            <ImageDisplayDialog
+                title={props.data.name}
+                source={source}
+                download={download}
+                open={previewOpen}
+                close={closePreview}
             />
         </Grid>
     )
 
 }
 
-export default FileCard
+export default ImageCard
