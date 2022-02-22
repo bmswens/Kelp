@@ -15,7 +15,7 @@
     "@testing-library/user-event": "^12.1.10",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-mui-dropzone": "git+https://github.com/bmswens/material-ui-dropzone.git",
+    "react-mui-dropzone": "^4.0.6",
     "react-scripts": "4.0.3",
     "use-double-click": "^1.0.5",
     "web-vitals": "^1.0.1"
